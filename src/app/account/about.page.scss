@@ -1,0 +1,19 @@
+details {
+  padding: 14px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+details:last-child {
+  border-bottom: 0;
+}
+
+summary {
+  color: #1e293b;
+  font-size: 0.83rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+details p {
+  margin: 10px 0 2px;
+}

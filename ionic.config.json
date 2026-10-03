@@ -1,0 +1,7 @@
+{
+  "name": "FocusFlowApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

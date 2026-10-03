@@ -1,0 +1,614 @@
+<ion-content class="focus-content">
+  <main class="page-shell focus-shell" *ngIf="session$ | async as session">
+    <div
+      class="focus-lock-banner"
+      *ngIf="session.phase === 'engage' || (session.phase === 'focus' && session.started) || session.protectedRecovery"
+    >
+      <span class="lock-icon" aria-hidden="true"></span>
+      <strong>
+        {{
+          session.protectedRecovery
+            ? session.running ? 'Break in progress' : 'Break paused'
+            : session.phase === 'engage'
+              ? 'Ready to start'
+            : session.running
+              ? 'Focus session in progress'
+              : 'Focus paused'
+        }}
+      </strong>
+      <span class="lock-badge">Stay on this screen</span>
+      <button
+        class="emergency-exit-button"
+        type="button"
+        *ngIf="session.phase === 'focus' || session.phase === 'recovery' || (session.phase === 'break' && session.commitment.trim())"
+        (click)="confirmEmergencyExit()"
+      >
+        Emergency exit
+      </button>
+    </div>
+
+    <div class="background-pause-banner" *ngIf="session.phase === 'focus' && session.started && !session.running" role="status">
+      <span aria-hidden="true"></span>
+      <div>
+        <strong>Focus session paused</strong>
+        <p>Your remaining time is saved on this device. Resume when you’re ready, or use Emergency exit if needed.</p>
+      </div>
+    </div>
+    <div class="background-pause-banner" *ngIf="timerService.persistenceError as persistenceError" role="alert">
+      <span aria-hidden="true">!</span>
+      <div><strong>Session save issue</strong><p>{{ persistenceError }}</p></div>
+    </div>
+
+    <header class="focus-header">
+      <div>
+        <div class="feature-label">
+          <span>FOCUS TIMER</span>
+          <span>Start with one small step</span>
+        </div>
+        <h1>Focus Timer</h1>
+      </div>
+      <button class="research-button" type="button" (click)="openResearch()">
+        <span>How it works</span>
+      </button>
+    </header>
+
+    <nav class="phase-pills" aria-label="Timer phase" *ngIf="!session.commitment.trim() && !session.protectedRecovery">
+      <button
+        type="button"
+        *ngFor="let phase of phases"
+        [class.is-active]="session.phase === phase.id || (session.phase === 'idle' && phase.id === 'focus')"
+        [class.is-recovery]="phase.id === 'recovery' && session.phase === phase.id"
+        [attr.aria-pressed]="session.phase === phase.id || (session.phase === 'idle' && phase.id === 'focus')"
+        (click)="setPhase(phase.id)"
+      >
+        {{ phase.label }}
+      </button>
+    </nav>
+
+    <section class="target-card">
+      <div class="target-icon" aria-hidden="true"></div>
+      <div class="target-copy">
+        <span class="eyebrow">Working on</span>
+        <h2>{{ activeTarget(session) }}</h2>
+        <p>{{ activeTaskDetails(session) }}</p>
+      </div>
+      <button
+        class="change-task-button"
+        type="button"
+        [disabled]="session.running"
+        [attr.aria-expanded]="showTaskPicker"
+        (click)="toggleTaskPicker()"
+      >
+        {{ showTaskPicker ? 'Done' : session.currentTaskId ? 'Change' : 'Choose task' }}
+      </button>
+    </section>
+
+    <section class="task-picker" *ngIf="showTaskPicker">
+      <ng-container *ngIf="tasks$ | async as tasks">
+        <p class="picker-title">Pick one thing to work on</p>
+        <button
+          class="task-option"
+          type="button"
+          *ngFor="let task of openTasks(tasks)"
+          [class.is-selected]="session.currentTaskId === task.id"
+          (click)="selectTask(task)"
+        >
+          <span class="task-category-dot" [attr.data-category]="task.category"></span>
+          <span class="task-option-copy">
+            <span class="task-option-title-row">
+              <span class="canvas-tag" *ngIf="task.source === 'canvas'">
+                Course work{{ task.sourceCourse ? ' · ' + task.sourceCourse : '' }}
+              </span>
+              <strong>{{ displayTitle(task.title, task.sourceCourse) }}</strong>
+            </span>
+            <small>
+              {{ task.duration }} min estimated · {{ task.category }} ·
+              {{ recoveryEstimate(session) }}
+            </small>
+          </span>
+          <span class="task-option-check" *ngIf="session.currentTaskId === task.id">✓</span>
+        </button>
+        <div class="picker-empty" *ngIf="!openTasks(tasks).length">
+          <span>Your task list is clear for now.</span>
+          <button type="button" (click)="openTasksPage()">Add a task</button>
+        </div>
+        <button
+          *ngIf="session.currentTaskId"
+          class="clear-task-button"
+          type="button"
+          (click)="selectFreeSprint()"
+        >
+          Focus without a task
+        </button>
+      </ng-container>
+    </section>
+
+    <section class="timer-card" [class.is-pulsing]="session.phase === 'focus' && session.running">
+      <div
+        class="timer-ring-wrap"
+        [class.burst-active]="burstActive"
+        [style.--phase-color]="phaseColor(session.phase)"
+        [style.--phase-trail]="phaseTrail(session.phase)"
+      >
+        <div
+          class="timer-ring"
+          role="progressbar"
+          [attr.aria-valuenow]="progressPercent(session)"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          [attr.aria-label]="timerDescription(session)"
+          [style.background]="'conic-gradient(from -90deg, var(--phase-color) ' + (progressPercent(session) || 12) + '%, var(--phase-trail) 0)'"
+        >
+          <div class="timer-face">
+            <span
+              class="time-display"
+              [class.is-not-started]="session.phase === 'idle' || session.phase === 'engage'"
+            >
+              {{ timerDisplay(session) }}
+            </span>
+            <div class="phase-caption">
+              <span>{{ phaseName(session.phase) }}</span>
+            </div>
+            <div class="cycle-dots" aria-label="Completed focus cycles">
+              <span
+                *ngFor="let dot of cycleDots; let i = index"
+                [class.is-complete]="cycleComplete(i, session.completedCycles)"
+              ></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="timer-hint" *ngIf="session.phase === 'idle' || session.phase === 'engage'">
+        {{ timerDescription(session) }}
+      </p>
+
+      <section class="engagement-gate" *ngIf="session.phase === 'engage'">
+        <div class="gate-heading">
+          <div>
+            <span class="gate-kicker">Get started</span>
+            <h2>Write your first step</h2>
+          </div>
+        </div>
+        <p>
+          The timer has not started yet. Write the <strong>first specific action</strong>
+          you’ll do, then tap <strong>Start timer</strong>. You can cancel setup at any time.
+        </p>
+
+        <div class="micro-prompts">
+          <span class="micro-prompt-label">Quick ideas</span>
+          <div class="prompt-list">
+            <button
+              type="button"
+              *ngFor="let prompt of microPrompts"
+              (click)="useMicroPrompt(prompt)"
+            >
+              + {{ prompt }}
+            </button>
+          </div>
+        </div>
+
+        <div class="launch-mode-picker" role="group" aria-label="Choose a timer length">
+          <span>Timer length</span>
+          <button
+            type="button"
+            [class.is-selected]="launchMode === 'micro'"
+            [attr.aria-pressed]="launchMode === 'micro'"
+            (click)="chooseLaunchMode('micro')"
+          >
+            2-minute start
+          </button>
+          <button
+            type="button"
+            [class.is-selected]="launchMode === 'deep'"
+            [attr.aria-pressed]="launchMode === 'deep'"
+            (click)="chooseLaunchMode('deep')"
+          >
+            {{ session.focusDuration / 60 | number:'1.0-0' }} minutes
+          </button>
+        </div>
+
+        <label class="commitment-label" for="focus-commitment">Your first specific action</label>
+        <ion-textarea
+          id="focus-commitment"
+          [(ngModel)]="commitment"
+          autoGrow="true"
+          maxlength="180"
+          rows="2"
+          placeholder="e.g. Open doc and write first paragraph..."
+          [attr.aria-invalid]="validationMessage ? 'true' : null"
+          aria-describedby="commitment-meter commitment-error"
+        ></ion-textarea>
+        <div class="commitment-meter" id="commitment-meter">
+          <span class="commitment-meter-track">
+            <span [style.width.%]="commitmentProgress"></span>
+          </span>
+          <strong [class.is-ready]="commitmentReady">
+            {{ commitmentReady ? '✓ ready' : commitmentLength + '/8' }}
+          </strong>
+        </div>
+        <p class="validation-message" id="commitment-error" *ngIf="validationMessage" role="alert">
+          {{ validationMessage }}
+        </p>
+        <button
+          class="unlock-button"
+          type="button"
+          [disabled]="!commitmentReady"
+          (click)="startSession()"
+        >
+          Start timer
+          {{ launchMode === 'micro' ? '2-minute start' : 'Focus session' }}
+        </button>
+        <button class="cancel-engagement-button" type="button" (click)="cancelEngagement()">
+          Not ready? Cancel setup
+        </button>
+      </section>
+
+      <div class="session-commitment" *ngIf="session.commitment && session.started">
+        <span aria-hidden="true"></span>
+        <div>
+          <small>YOUR COMMITMENT</small>
+          <p>“{{ session.commitment }}”</p>
+        </div>
+      </div>
+
+      <section
+        class="session-finish-card"
+        *ngIf="(session.phase === 'recovery' || session.phase === 'break') && session.commitment.trim()"
+      >
+        <span class="finish-mark" aria-hidden="true">✓</span>
+        <div class="finish-copy">
+          <span class="finish-eyebrow">FOCUS BLOCK COMPLETE</span>
+          <h2>You made room for the work.</h2>
+          <p>
+            {{ completedBlockMinutes(session) }} minutes with
+            <strong>{{ activeTarget(session) }}</strong>.
+          </p>
+          <p class="finish-steps" *ngIf="activeTask(session) as completedTask">
+            {{ completedTask.subtasks.length
+              ? completedStepsLabel(completedTask)
+              : 'Your task is ready for its next small step.' }}
+          </p>
+        </div>
+      </section>
+
+      <section class="recovery-callout" *ngIf="session.phase === 'recovery'">
+        <div class="recovery-callout-heading">
+          <strong>{{ session.protectedRecovery ? 'Long break' : 'Break time' }}</strong>
+          <span>Time to reset</span>
+        </div>
+        <p *ngIf="session.protectedRecovery; else regularRecoveryCopy">
+          Take {{ recoveryDurationLabel(session) }} away from the work. Get some water, stretch, or rest your eyes before the next focus session.
+        </p>
+        <ng-template #regularRecoveryCopy><p>Step away for a moment. You can return when you feel ready.</p></ng-template>
+        <button type="button" (click)="openBreathingRoom()">Try a short breathing reset</button>
+        <button
+          type="button"
+          *ngIf="session.protectedRecovery && !session.running"
+          (click)="resumeProtectedRecovery()"
+        >
+          Resume break
+        </button>
+      </section>
+
+      <div class="motivation-card" *ngIf="session.phase === 'focus' && session.running">
+        <p>“{{ motivations[quoteIndex] }}”</p>
+      </div>
+
+      <section class="phase-message" *ngIf="session.phase === 'break'">
+        <div>
+          <strong>Short break</strong>
+          <p>Step away for a moment, then come back ready for your next focus block.</p>
+        </div>
+      </section>
+    </section>
+
+    <section
+      class="focus-quest-card"
+      *ngIf="session.phase === 'focus' && activeTask(session) as task"
+      [style.--task-accent]="task.color || '#6366f1'"
+    >
+      <div class="quest-heading">
+        <div>
+          <span class="quest-eyebrow">TASK CHECKLIST</span>
+          <h2>Task progress</h2>
+        </div>
+        <div class="quest-heading-actions">
+          <span class="quest-progress-label" *ngIf="task.subtasks.length">
+            {{ focusStepProgress(task) }}%
+          </span>
+          <button
+            class="quest-nudge-button"
+            type="button"
+            [attr.aria-expanded]="focusNudgeOpen"
+            (click)="toggleFocusNudge()"
+          >
+            {{ focusNudgeOpen ? 'Hide tip' : 'Need a nudge?' }}
+          </button>
+        </div>
+      </div>
+
+      <p class="quest-nudge" *ngIf="focusNudgeOpen">
+        Make it tiny: work on just the next two minutes. You can refine the step as you go.
+      </p>
+
+      <div class="quest-progress" *ngIf="task.subtasks.length">
+        <span [style.width.%]="focusStepProgress(task)"></span>
+      </div>
+
+      <p class="quest-empty" *ngIf="!task.subtasks.length">
+        Add a few concrete steps to make this task easier to move through.
+      </p>
+
+      <div class="quest-steps" *ngIf="task.subtasks.length">
+        <button
+          class="quest-step"
+          type="button"
+          *ngFor="let step of task.subtasks"
+          [class.is-done]="step.done"
+          [attr.aria-pressed]="step.done"
+          (click)="toggleFocusStep(task, step)"
+        >
+          <span class="quest-step-check">{{ step.done ? '✓' : '' }}</span>
+          <span>{{ step.title }}</span>
+          <span class="quest-step-spark" *ngIf="step.done">✦</span>
+        </button>
+      </div>
+
+      <div class="quest-cleared" *ngIf="task.subtasks.length && focusStepProgress(task) === 100">
+        <span aria-hidden="true">✓</span>
+        <strong>All listed steps are complete.</strong>
+      </div>
+
+      <form class="quest-add-step" (ngSubmit)="addFocusStep(task)">
+        <input
+          type="text"
+          name="focusStepDraft"
+          [(ngModel)]="focusStepDraft"
+          maxlength="100"
+          placeholder="Add a small next step..."
+          [attr.aria-label]="'Add a step to ' + activeTarget(session)"
+        />
+        <button type="submit" [disabled]="!focusStepDraft.trim()" aria-label="Add focus step">
+          +
+        </button>
+      </form>
+    </section>
+
+    <section class="ambient-card">
+      <div class="ambient-heading">
+        <span class="ambient-icon" aria-hidden="true"></span>
+        <div>
+          <strong>Pick your focus vibe</strong>
+          <small>{{ activeSoundDescription }}</small>
+        </div>
+        <div class="volume-control" *ngIf="ambientMode !== 'off'" aria-label="Sound volume">
+          <span>Low</span>
+          <button
+            type="button"
+            *ngFor="let step of volumeSteps; let i = index"
+            [class.is-on]="ambientVolume >= step - 0.01"
+            [style.height.px]="8 + i * 3"
+            [attr.aria-label]="'Set volume to ' + (step * 100) + ' percent'"
+            [attr.aria-pressed]="ambientVolume === step"
+            (click)="setAmbientVolume(step)"
+          ></button>
+          <span>High</span>
+        </div>
+      </div>
+      <div class="sound-options">
+        <button
+          type="button"
+          *ngFor="let sound of soundOptions"
+          [class.is-selected]="ambientMode === sound.id"
+          [attr.aria-pressed]="ambientMode === sound.id"
+          (click)="toggleAmbientMode(sound.id)"
+        >
+          <span class="sound-emoji" aria-hidden="true">{{ sound.icon }}</span>
+          <strong>{{ sound.label }}</strong>
+          <i *ngIf="ambientMode === sound.id"></i>
+        </button>
+      </div>
+      <p class="audio-error" *ngIf="audioError" role="alert">{{ audioError }}</p>
+    </section>
+
+    <section class="main-controls" *ngIf="session.phase !== 'recovery' && session.phase !== 'break'">
+      <button
+        class="reset-button"
+        type="button"
+        *ngIf="!session.commitment.trim() && !session.protectedRecovery"
+        aria-label="Reset timer"
+        title="Reset timer"
+        (click)="resetSession()"
+      >
+        ↺
+      </button>
+      <button
+        class="main-action-button"
+        type="button"
+        [disabled]="session.phase === 'engage'"
+        (click)="mainAction(session)"
+      >
+        {{
+          session.running
+            ? 'Pause'
+            : session.phase === 'idle'
+              ? 'Set up focus'
+              : session.phase === 'engage'
+                ? 'Complete setup above ↑'
+              : focusPausedForLeaving
+                ? 'Resume focus'
+                : 'Resume'
+        }}
+      </button>
+    </section>
+
+    <section class="phase-controls" *ngIf="(session.phase === 'recovery' && !session.protectedRecovery) || session.phase === 'break'">
+      <button
+        class="main-action-button"
+        type="button"
+        (click)="mainAction(session)"
+      >
+        {{ session.running ? 'Pause' : 'Resume' }}
+      </button>
+      <button
+        class="complete-session-button"
+        type="button"
+        *ngIf="session.phase === 'break' && session.commitment.trim().length >= 8"
+        (click)="completeTask()"
+      >
+        ✓ {{ session.currentTaskId ? 'Complete Task' : 'Finish Session' }}
+      </button>
+      <button
+        class="emergency-exit-button"
+        type="button"
+        *ngIf="session.phase === 'recovery' || (session.phase === 'break' && session.commitment.trim())"
+        (click)="confirmEmergencyExit()"
+      >
+        Emergency exit
+      </button>
+    </section>
+
+    <section class="cascade-card" [class.cascade-disabled]="!cascadeBufferEnabled">
+      <div class="cascade-icon" aria-hidden="true"></div>
+      <div class="cascade-copy">
+        <span>BREAK SETTINGS</span>
+        <h2>Automatic recovery breaks</h2>
+        <p *ngIf="cascadeBufferEnabled; else bufferOff">
+          When a focus timer ends, a five-minute break starts before your regular break. Every fourth break lasts 15 minutes.
+        </p>
+        <ng-template #bufferOff>
+          <p>Turn this on to add a five-minute break after each focus timer. Every fourth break lasts 15 minutes.</p>
+        </ng-template>
+      </div>
+      <div class="cascade-status">
+        <span>{{ cascadeBufferEnabled ? 'ON' : 'OFF' }}</span>
+        <button
+          class="cascade-toggle"
+          type="button"
+          role="switch"
+          [attr.aria-checked]="cascadeBufferEnabled"
+          [attr.aria-label]="'Automatic recovery breaks ' + (cascadeBufferEnabled ? 'on' : 'off')"
+          (click)="toggleCascadeBuffer()"
+        >
+          <i></i>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <section
+    class="modal-backdrop research-backdrop"
+    *ngIf="researchModalOpen"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="research-title"
+  >
+    <div class="research-modal">
+      <header class="research-modal-header">
+        <div>
+          <div>
+            <h2 id="research-title">How FocusFlow works</h2>
+            <p>Learn what each focus feature does and when to use it.</p>
+          </div>
+        </div>
+        <button type="button" aria-label="Close research" (click)="closeResearch()">✕</button>
+      </header>
+
+      <nav class="research-tabs" aria-label="Research feature">
+        <button
+          type="button"
+          *ngFor="let feature of researchFeatures"
+          [class.is-selected]="researchTab === feature.id"
+          [attr.aria-pressed]="researchTab === feature.id"
+          (click)="selectResearchTab(feature.id)"
+        >
+          <span class="research-tab-title">{{ feature.title }}</span>
+          <span class="research-tab-badge">{{ feature.badge }}</span>
+        </button>
+      </nav>
+
+      <div class="research-content">
+        <div class="research-feature-heading">
+          <div>
+            <span>{{ currentResearchFeature.badge }}</span>
+            <p>Designed for: <strong>{{ currentResearchFeature.persona }}</strong></p>
+          </div>
+        </div>
+        <article class="research-problem">
+          <h3>What this helps with</h3>
+          <p>“{{ currentResearchFeature.problem }}”</p>
+        </article>
+        <article class="research-rationale">
+          <h3>Why it is useful</h3>
+          <p>{{ currentResearchFeature.rationale }}</p>
+        </article>
+        <article class="research-solution">
+          <h3>How it works</h3>
+          <p>{{ currentResearchFeature.solution }}</p>
+        </article>
+      </div>
+
+      <footer class="research-footer">
+        <span>Ground truth data from user study interviews</span>
+        <button type="button" (click)="takeResearchAction()">
+          {{ researchTab === 'focus' ? 'Try Focus Mode →' : researchTab === 'buffer' ? 'View Task Buffers →' : 'Connect Canvas →' }}
+        </button>
+      </footer>
+    </div>
+  </section>
+
+  <section
+    class="modal-backdrop breathing-backdrop"
+    *ngIf="breathingOpen"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="breathing-title"
+  >
+    <div class="breathing-modal">
+      <header>
+        <div><span></span><strong>RECOVERY BREAK</strong></div>
+        <button type="button" aria-label="Minimize breathing room" (click)="closeBreathingRoom()">✕</button>
+      </header>
+
+      <div class="breathing-stage">
+        <span class="breathing-kicker">TAKE A SHORT REST</span>
+        <h2 id="breathing-title">Five-minute break</h2>
+        <p class="breathing-description">
+          Follow a slow breathing rhythm or take a quiet pause before your next focus session.
+        </p>
+        <div class="breathing-orb" [class.is-expanding]="breathPhase === 'Inhale' || breathPhase === 'Hold'">
+          <strong>{{ breathPhase }}</strong>
+          <small>{{ breathPhaseSeconds }}s</small>
+        </div>
+        <strong class="buffer-countdown">
+          Break ends in: {{ formatTime(breathingSecondsLeft) }}
+        </strong>
+        <span class="rest-note">Eyes away from screen · 20-20-20 rest</span>
+        <div class="breathing-rain-control">
+          <span>Rain sound</span>
+          <button
+            type="button"
+            [class.is-on]="ambientMode === 'rain'"
+            [attr.aria-pressed]="ambientMode === 'rain'"
+            (click)="toggleBreathingRain()"
+          >
+            {{ ambientMode === 'rain' ? 'On' : 'Off' }}
+          </button>
+        </div>
+      </div>
+
+      <footer>
+        <button
+          class="buffer-complete-button"
+          type="button"
+          (click)="completeBreathingRoom()"
+        >
+          End recovery break (+30 points)
+        </button>
+        <button class="minimize-buffer-button" type="button" (click)="closeBreathingRoom()">
+          Close break guide
+        </button>
+      </footer>
+    </div>
+  </section>
+</ion-content>

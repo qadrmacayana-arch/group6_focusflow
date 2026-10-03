@@ -1,0 +1,271 @@
+/* Core Ionic CSS */
+@import "@ionic/angular/css/core.css";
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  user-select: text;
+  background-color: #f8f7fb;
+  color: #302b3b;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+ion-content {
+  --background: #f8f7fb;
+  --padding-bottom: 24px;
+}
+
+ion-header {
+  box-shadow: 0 1px 0 #e2e8f0;
+}
+
+ion-toolbar {
+  --min-height: 60px;
+  padding-inline: 4px;
+}
+
+ion-title {
+  font-size: 1.08rem;
+}
+
+ion-content > .page-shell {
+  width: 100%;
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+@media (min-width: 1024px) {
+  ion-content > .page-shell {
+    max-width: 1000px;
+  }
+}
+
+.page-heading {
+  margin: 12px 0 22px;
+  text-align: left;
+
+  h1 {
+    margin: 8px 0 7px;
+    color: #0f172a;
+    font-size: clamp(1.7rem, 7vw, 2.25rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    word-spacing: 0.04em;
+    line-height: 1.16;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+}
+
+.page-heading h1 {
+  color: #302b3b;
+}
+
+.eyebrow {
+  color: #7561bd;
+}
+
+.eyebrow {
+  color: #0e7490;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin: 28px 0 12px;
+
+  h2 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+
+  span {
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+}
+
+.surface-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+.empty-state {
+  padding: 30px 22px;
+  text-align: center;
+
+  h2,
+  h3 {
+    margin: 0 0 8px;
+    color: #0f172a;
+    font-size: 1rem;
+    font-weight: 800;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+}
+
+.grad-brand {
+  background: linear-gradient(135deg, #8173c2 0%, #69a7a2 100%);
+}
+
+.grad-focus {
+  background: linear-gradient(135deg, #9687d1 0%, #6d9fba 100%);
+}
+
+.grad-canvas {
+  background: linear-gradient(135deg, #df937f 0%, #d3aa73 100%);
+}
+
+.grad-tasks {
+  background: linear-gradient(135deg, #79aa8c 0%, #58a7a0 100%);
+}
+
+.grad-calendar {
+  background: linear-gradient(135deg, #75aaa5 0%, #7884bd 100%);
+}
+
+.grad-amber {
+  background: linear-gradient(135deg, #d8ad6c 0%, #d98875 100%);
+}
+
+.ff-card {
+  background: #ffffff;
+  border: 1px solid #dce1e5;
+  border-radius: 18px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+  padding: 18px;
+  margin-bottom: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.ff-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+ion-toolbar {
+  --background: #ffffff;
+  --color: #2d3940;
+  --border-width: 0;
+}
+
+ion-title {
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+ion-button {
+  --border-radius: 14px;
+  font-weight: 700;
+  text-transform: none;
+  min-height: 48px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+ion-button:focus-visible,
+ion-checkbox:focus-visible {
+  outline: 3px solid #8e7dc9;
+  outline-offset: 3px;
+}
+
+.focusflow-reduce-motion *,
+.focusflow-reduce-motion *::before,
+.focusflow-reduce-motion *::after {
+  scroll-behavior: auto !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+.btn-press {
+  transition: transform 0.15s ease, filter 0.15s ease;
+  cursor: pointer;
+  &:active {
+    transform: scale(0.95);
+    filter: brightness(0.92);
+  }
+}
+
+@media (min-width: 768px) {
+  ion-toolbar {
+    padding-inline: max(12px, calc((100vw - 760px) / 2));
+  }
+
+  ion-content {
+    --padding-start: 24px;
+    --padding-end: 24px;
+  }
+}
+
+@media (max-width: 767px) {
+  ion-content {
+    --padding-start: 14px;
+    --padding-end: 14px;
+  }
+
+  ion-content > .page-shell {
+    max-width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

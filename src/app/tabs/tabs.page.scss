@@ -1,0 +1,243 @@
+ion-tab-bar {
+  --background: rgba(255, 250, 255, 0.99);
+  --border: 0;
+  --color: #827b91;
+  --color-selected: #5c2cba;
+  height: auto;
+  min-height: 70px;
+  padding: 7px 8px calc(9px + env(safe-area-inset-bottom));
+  box-shadow: 0 -1px 0 #e3d7f3, 0 -8px 24px rgba(74, 57, 124, 0.1);
+}
+
+ion-tab-button {
+  --padding-start: 4px;
+  --padding-end: 4px;
+  font-size: 0.68rem;
+  font-weight: 750;
+  border-radius: 17px;
+  transition: background-color 160ms ease, transform 160ms ease;
+
+  &.tab-selected {
+    --background: #e4d8ff;
+    --color-selected: #5c2cba;
+    border-radius: 18px;
+    transform: translateY(-2px);
+  }
+
+  ion-icon {
+    font-size: 23px;
+    margin-bottom: 4px;
+  }
+
+  ion-badge {
+    --background: #fffbeb;
+    --color: #9a3412;
+    min-width: 18px;
+    padding: 3px 5px;
+    font-size: 0.6rem;
+    font-weight: 800;
+  }
+}
+
+ion-menu {
+  --width: min(326px, 88vw);
+  --background: #ffffff;
+}
+
+.menu-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: calc(18px + env(safe-area-inset-top)) 20px 18px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.menu-brand-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #7138d4, #149b88);
+  border-radius: 14px;
+  box-shadow: 0 5px 12px rgba(111, 83, 190, 0.2);
+  font-size: 1.25rem;
+  place-items: center;
+}
+
+.menu-brand div,
+.menu-profile > span:nth-child(2),
+.menu-plan-card > span:nth-child(2) {
+  display: grid;
+  gap: 3px;
+}
+
+.menu-brand strong {
+  color: #0f172a;
+  font-size: 0.98rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.menu-brand small,
+.menu-profile small,
+.menu-plan-card small {
+  color: #64748b;
+  font-size: 0.68rem;
+}
+
+.account-menu-content {
+  --background: #ffffff;
+  --padding-start: 14px;
+  --padding-end: 14px;
+}
+
+.menu-profile,
+.menu-plan-card {
+  display: flex;
+  min-height: 64px;
+  align-items: center;
+  gap: 11px;
+  padding: 11px;
+  margin: 14px 0 20px;
+  color: #0f172a;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  text-decoration: none;
+}
+
+.menu-avatar,
+.menu-plan-icon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  color: #62549e;
+  background: #f0edfb;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  place-items: center;
+}
+
+.menu-profile strong,
+.menu-plan-card strong {
+  font-size: 0.8rem;
+  font-weight: 850;
+}
+
+.menu-chevron {
+  margin-left: auto;
+  color: #94a3b8;
+  font-size: 1.3rem;
+}
+
+.menu-section-label {
+  padding: 0 10px;
+  margin: 19px 0 8px;
+  color: #94a3b8;
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.menu-links {
+  display: grid;
+  gap: 4px;
+}
+
+.menu-links ion-menu-toggle {
+  display: block;
+}
+
+.menu-links a {
+  display: flex;
+  min-height: 46px;
+  align-items: center;
+  gap: 11px;
+  padding: 0 11px;
+  color: #475569;
+  border-radius: 12px;
+  font-size: 0.83rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.menu-links a > span:first-child {
+  width: 23px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.menu-links a.is-active {
+  color: #62549e;
+  background: #f0edfb;
+}
+
+.menu-plan-card {
+  margin: 10px 0 8px;
+  background: linear-gradient(120deg, #f0edfb, #fbefec);
+  border-color: #e3d9ef;
+}
+
+.menu-plan-icon {
+  color: #7568bd;
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.menu-disclaimer {
+  padding: 0 4px;
+  color: #64748b;
+  font-size: 0.65rem;
+  line-height: 1.45;
+}
+
+.menu-footnote {
+  padding: 14px 5px;
+  margin-top: 20px;
+  color: #94a3b8;
+  border-top: 1px solid #f1f5f9;
+  font-size: 0.66rem;
+}
+
+.more-menu-toggle {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+}
+
+.more-menu-toggle button {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 5px 2px;
+  color: #64748b;
+  background: transparent;
+  border: 0;
+  border-radius: 14px;
+  font: inherit;
+  font-size: 0.65rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.more-menu-toggle button span {
+  font-size: 1.2rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 22px;
+}
+
+.more-menu-toggle button:focus-visible {
+  outline: 3px solid rgba(6, 182, 212, 0.28);
+}
+
+.more-menu-toggle button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}

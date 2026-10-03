@@ -1,0 +1,118 @@
+<ion-content class="home-content">
+  <div class="page-shell" *ngIf="tasks$ | async as tasks">
+    <section class="welcome-header">
+      <div class="welcome-copy">
+        <span class="welcome-day">{{ weekday }}</span>
+        <h1>{{ greeting }}, {{ (user$ | async)?.firstName || 'Friend' }} <span aria-hidden="true">👋</span></h1>
+        <div class="xp-row">
+          <strong>{{ xp$ | async }} points</strong>
+          <div class="xp-track" role="progressbar" [attr.aria-valuenow]="xpPercent()" aria-valuemin="0" aria-valuemax="100">
+            <span [style.width.%]="xpPercent()"></span>
+          </div>
+          <small>Level {{ level() }}</small>
+        </div>
+      </div>
+      <p class="demo-note" *ngIf="(user$ | async)?.isLoggedIn">
+        {{ authMessage }} Test account is stored in this browser only; email ownership is not verified.
+      </p>
+      <button class="profile-button" type="button" (click)="openProfile()" aria-label="Open your profile">
+        {{ profileMark((user$ | async)?.firstName, (user$ | async)?.surname) }}
+      </button>
+    </section>
+
+    <ng-container *ngIf="settings$ | async as settings">
+      <section class="shield-strip">
+        <div class="shield-heading">
+          <span class="shield-icon" aria-hidden="true">✓</span>
+          <div>
+            <h2>Breaks to recharge</h2>
+            <p>{{ settings.cascadeRecoveryBuffer ? 'A little breathing room after focus' : 'Take a break whenever you need one' }}</p>
+          </div>
+          <span class="active-badge" [class.inactive-badge]="!settings.cascadeRecoveryBuffer">
+            {{ settings.cascadeRecoveryBuffer ? 'On' : 'Off' }}
+          </span>
+        </div>
+        <p class="shield-copy">
+          {{ settings.cascadeRecoveryBuffer
+            ? 'A five-minute breather follows each focus sprint. Every fourth break is a little longer.'
+            : 'Want a reminder to pause? Turn on reset breaks in Settings.' }}
+        </p>
+      </section>
+    </ng-container>
+
+    <ion-card class="focus-card">
+      <ion-card-content>
+        <div class="focus-card-copy">
+          <span class="focus-card-label">✨ A LITTLE PROGRESS ADDS UP</span>
+          <h2>Ready for a focus sprint?</h2>
+          <p *ngIf="pendingTasks(); else noTasksToPlan">
+            {{ pendingTasks() }} open {{ pendingTasks() === 1 ? 'task' : 'tasks' }} — choose one and get started.
+          </p>
+          <ng-template #noTasksToPlan><p>Start fresh with a short focus sprint.</p></ng-template>
+          <ion-button class="sprint-button" color="light" (click)="startFocusSession()">
+            🎧 Start a focus sprint
+          </ion-button>
+        </div>
+        <div class="focus-card-art" aria-hidden="true">
+          <span class="art-spark spark-one">✦</span>
+          <span class="art-spark spark-two">✦</span>
+          <div class="art-clock">
+            <ion-icon name="timer-outline"></ion-icon>
+            <strong>25</strong>
+            <small>MIN</small>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="section-heading"><h2>Your shortcuts</h2></div>
+    <div class="quick-grid">
+      <button type="button" class="quick-card" (click)="navigateTo('focus')">
+        <span class="quick-icon focus" aria-hidden="true"><ion-icon name="timer-outline"></ion-icon></span>
+        <strong>Focus timer</strong>
+        <small>Choose a task and duration</small>
+      </button>
+      <button type="button" class="quick-card" (click)="navigateTo('canvas')">
+        <span class="quick-icon canvas" aria-hidden="true"><ion-icon name="school-outline"></ion-icon></span>
+        <strong>Course work</strong>
+        <small>View course assignments</small>
+      </button>
+      <button type="button" class="quick-card" (click)="navigateTo('tasks')">
+        <span class="quick-icon tasks" aria-hidden="true"><ion-icon name="checkbox-outline"></ion-icon></span>
+        <strong>Tasks</strong>
+        <small>View or add work</small>
+      </button>
+      <button type="button" class="quick-card" (click)="navigateTo('insights')">
+        <span class="quick-icon stats" aria-hidden="true"><ion-icon name="bar-chart-outline"></ion-icon></span>
+        <strong>Progress</strong>
+        <small>Review completed sessions</small>
+      </button>
+    </div>
+
+    <div class="section-heading tasks-heading">
+      <h2>Your next tasks</h2>
+      <button type="button" (click)="navigateTo('tasks')">View all ({{ pendingTasks() }})</button>
+    </div>
+    <ng-container *ngIf="openTasks(tasks).length; else noOpenTasks">
+      <button type="button" class="task-card" *ngFor="let task of nextTasks(tasks)" [attr.data-category]="task.category" [style.--task-accent]="task.color || null" (click)="startTaskFocus(task)">
+        <div class="task-card-left">
+          <span class="course-tag">{{ task.category }}</span>
+          <h3>{{ displayTitle(task.title, task.sourceCourse) }}</h3>
+          <span class="task-meta">{{ task.duration }} min · {{ taskDeadline(task) }}</span>
+        </div>
+        <span class="task-chevron">→</span>
+      </button>
+    </ng-container>
+
+    <ng-template #noOpenTasks>
+      <div class="surface-card empty-state">
+        <h3>{{ tasks.length ? 'You’re all caught up' : 'Your slate is clear' }}</h3>
+        <p>{{ tasks.length ? 'You’ve finished everything on your list. Take a well-earned break.' : 'When assignments arrive, they’ll show up here.' }}</p>
+        <div class="empty-actions" *ngIf="!tasks.length">
+          <ion-button size="small" (click)="navigateTo('tasks')">Add your first task</ion-button>
+          <button type="button" (click)="startFocusSession()">Try a focus sprint</button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</ion-content>

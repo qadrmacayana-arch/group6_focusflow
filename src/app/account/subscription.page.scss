@@ -1,0 +1,195 @@
+.billing-switch {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  margin: 0 0 18px;
+  background: #e2e8f0;
+  border-radius: 14px;
+}
+
+.billing-switch button {
+  min-height: 40px;
+  padding: 0 13px;
+  color: #475569;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 0.79rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.billing-switch button.selected {
+  color: #0f172a;
+  background: #ffffff;
+  box-shadow: 0 2px 7px rgba(15, 23, 42, 0.1);
+}
+
+.billing-switch button span {
+  margin-left: 4px;
+  color: #15803d;
+  font-size: 0.64rem;
+}
+
+.plan-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.plan-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: 19px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
+  box-shadow: 0 9px 24px rgba(15, 23, 42, 0.04);
+}
+
+.featured-plan {
+  background: linear-gradient(150deg, #f0fdff, #ffffff 52%);
+  border-color: #67e8f9;
+}
+
+.student-plan {
+  background: linear-gradient(150deg, #fff7ed, #ffffff 52%);
+  border-color: #fed7aa;
+}
+
+.plan-label {
+  color: #0e7490;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.student-plan .plan-label {
+  color: #c2410c;
+}
+
+.plan-card h2 {
+  margin: 8px 0 5px;
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.plan-price {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: -0.055em;
+}
+
+.plan-price span {
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+.plan-description {
+  min-height: 39px;
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.plan-card .account-list {
+  flex: 1;
+  margin-bottom: 19px;
+}
+
+.plan-button {
+  width: 100%;
+}
+
+.plan-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+}
+
+.popular-tag {
+  padding: 5px 8px;
+  color: #0e7490;
+  background: #cffafe;
+  border-radius: 999px;
+  font-size: 0.61rem;
+  font-weight: 850;
+}
+
+.pricing-disclaimer {
+  margin: 13px 2px 24px;
+  color: #64748b;
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.premium-section > h2 {
+  margin: 6px 0 5px;
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.premium-section .account-intro {
+  margin-bottom: 14px;
+}
+
+.premium-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 15px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 17px;
+}
+
+.feature-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  background: #ecfeff;
+  border-radius: 13px;
+  font-size: 1.1rem;
+  place-items: center;
+}
+
+.premium-feature h3 {
+  margin: 0 0 5px;
+  font-size: 0.85rem;
+  font-weight: 850;
+}
+
+.premium-feature p {
+  margin: 0 0 8px;
+  color: #64748b;
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+
+.premium-feature small {
+  color: #0e7490;
+  font-size: 0.61rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+}
+
+.premium-section > .account-note {
+  margin-top: 13px;
+}
+
+@media (min-width: 720px) {
+  .plan-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+  }
+}

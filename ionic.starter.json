@@ -1,0 +1,7 @@
+{
+  "name": "FocusFlowApp",
+  "type": "angular-standalone",
+  "package": "@ionic/starter-tabs",
+  "version": "8.0.0",
+  "description": "FocusFlow Student Cognitive Workload & Canvas LMS Integration - Ionic Angular App"
+}

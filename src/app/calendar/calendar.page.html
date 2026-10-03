@@ -1,0 +1,128 @@
+<ion-content class="calendar-content ion-padding">
+  <main class="page-shell" *ngIf="tasks$ | async as tasks">
+    <ng-container *ngIf="reminders$ | async as reminders">
+      <section class="page-heading">
+        <span class="eyebrow">Plan your month</span>
+        <h1>Calendar</h1>
+        <p>See task deadlines, completed work, and reminders in one place.</p>
+      </section>
+
+      <section class="calendar-card" aria-label="Monthly task calendar">
+        <header class="calendar-header">
+          <button type="button" aria-label="Previous month" (click)="changeMonth(-1)">‹</button>
+          <h2>{{ monthLabel() }}</h2>
+          <button type="button" aria-label="Next month" (click)="changeMonth(1)">›</button>
+          <button class="today-button" type="button" (click)="goToToday()">Today</button>
+        </header>
+        <div class="calendar-grid" role="grid" aria-label="Calendar days">
+          <span class="weekday" role="columnheader" *ngFor="let weekday of weekdays">{{ weekday }}</span>
+          <button
+            type="button"
+            class="calendar-day"
+            role="gridcell"
+            *ngFor="let day of calendarDays(tasks, reminders)"
+            [class.outside-month]="!day.inCurrentMonth"
+            [class.is-today]="day.isToday"
+            [class.is-selected]="day.isSelected"
+            [attr.aria-label]="day.date + ', ' + day.taskCount + ' tasks, ' + day.reminderCount + ' reminders'"
+            [attr.aria-pressed]="day.isSelected"
+            (click)="selectDate(day.date)"
+          >
+            <span>{{ day.day }}</span>
+            <span class="day-markers" aria-hidden="true">
+              <i *ngIf="day.taskCount"></i>
+              <i class="reminder-marker" *ngIf="day.reminderCount"></i>
+            </span>
+          </button>
+        </div>
+        <p class="calendar-legend"><span></span> Task <i></i> Reminder</p>
+      </section>
+
+      <section class="selected-date-section">
+        <div class="section-heading">
+          <h2>{{ selectedDateLabel() }}</h2>
+          <span>{{ tasksForSelectedDate(tasks).length }} tasks · {{ remindersForSelectedDate(reminders).length }} reminders</span>
+        </div>
+
+        <article class="calendar-item task-item" *ngFor="let task of tasksForSelectedDate(tasks)" [class.is-completed]="task.status === 'completed'">
+          <span class="item-time">{{ task.dueTime || 'Any time' }}</span>
+          <div class="item-copy">
+            <strong>{{ displayTitle(task) }}</strong>
+            <small>{{ task.category }} · {{ task.duration }} min focus · {{ task.status === 'completed' ? 'Completed' : task.priority + ' priority' }}</small>
+          </div>
+          <button
+            *ngIf="task.status !== 'completed'"
+            type="button"
+            class="start-reminder"
+            (click)="startTaskFocus(task)"
+          >Start timer</button>
+        </article>
+
+        <article class="calendar-item reminder-item" *ngFor="let reminder of remindersForSelectedDate(reminders)">
+          <span class="item-time">{{ reminder.scheduledAt.slice(11, 16) }}</span>
+          <div class="item-copy">
+            <strong>{{ reminder.title }}</strong>
+            <small>{{ reminder.focusDurationMinutes }} min timer · {{ reminder.notified ? 'Reminder time passed' : 'Reminder scheduled' }}</small>
+          </div>
+          <button
+            type="button"
+            class="start-reminder"
+            (click)="startReminderFocus(reminder)"
+          >Start timer</button>
+          <button type="button" class="remove-reminder" [attr.aria-label]="'Delete reminder: ' + reminder.title" (click)="removeReminder(reminder)">×</button>
+        </article>
+
+        <p class="date-empty" *ngIf="!tasksForSelectedDate(tasks).length && !remindersForSelectedDate(reminders).length">
+          Nothing planned for this day. Add a task deadline or create a reminder below.
+        </p>
+      </section>
+
+      <section class="reminder-composer">
+        <div class="section-heading">
+          <div>
+            <h2>Write a reminder</h2>
+            <p>Choose a date, time, and focus timer for it.</p>
+          </div>
+        </div>
+        <form (ngSubmit)="addReminder()">
+          <label>
+            Reminder
+            <input name="reminderTitle" [(ngModel)]="reminderTitle" maxlength="120" placeholder="What should you remember?" required />
+          </label>
+          <div class="reminder-fields">
+            <label>
+              Date
+              <input name="reminderDate" type="date" [(ngModel)]="selectedDate" (ngModelChange)="selectDate($event)" [min]="minimumDate" required />
+            </label>
+            <label>
+              Time
+              <input name="reminderTime" type="time" [(ngModel)]="reminderTime" required />
+            </label>
+            <label>
+              Focus timer
+              <span class="duration-input">
+                <input name="reminderDuration" type="number" [(ngModel)]="reminderDuration" min="5" max="180" step="5" required />
+                <small>minutes</small>
+              </span>
+            </label>
+          </div>
+          <div class="reminder-footer">
+            <p role="status" *ngIf="reminderMessage">{{ reminderMessage }}</p>
+            <button type="submit" [disabled]="!reminderTitle.trim()">Save reminder</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="notification-card">
+        <div>
+          <h2>Notifications</h2>
+          <p>{{ notificationPermission() }}. Keep FocusFlow open for scheduled alerts.</p>
+          <small *ngIf="permissionMessage" role="status">{{ permissionMessage }}</small>
+        </div>
+        <button type="button" (click)="enableNotifications()" [disabled]="reminderService.getNotificationPermission() === 'granted'">
+          {{ reminderService.getNotificationPermission() === 'granted' ? 'Enabled' : 'Enable' }}
+        </button>
+      </section>
+    </ng-container>
+  </main>
+</ion-content>

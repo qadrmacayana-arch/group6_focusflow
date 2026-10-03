@@ -1,0 +1,129 @@
+<ion-content [fullscreen]="true" class="canvas-content ion-padding">
+  <div class="page-shell">
+    <section class="page-heading">
+      <span class="eyebrow">Stay in sync</span>
+      <h1>Connect Canvas.</h1>
+      <p>Import real course assignments and deadlines, then find them in your FocusFlow workload.</p>
+    </section>
+
+    <section class="connection-card">
+      <div class="connection-card-heading">
+        <span class="connection-mark" aria-hidden="true">📚</span>
+        <div>
+          <h2>Canvas LMS</h2>
+          <p>Securely sync your coursework</p>
+        </div>
+      </div>
+
+      <ol class="connect-steps">
+        <li>In Canvas, open <strong>Account → Settings → Approved Integrations</strong>.</li>
+        <li>Create a personal access token, then paste it here. Your school may restrict token creation.</li>
+      </ol>
+
+      <form (ngSubmit)="syncCanvas()">
+        <div class="form-field">
+          <ion-label for="canvas-domain">Canvas domain</ion-label>
+          <ion-input
+            id="canvas-domain"
+            name="canvasDomain"
+            [(ngModel)]="domain"
+            [disabled]="syncing"
+            type="text"
+            inputmode="url"
+            autocomplete="url"
+            autocapitalize="off"
+            placeholder="canvas.yourschool.edu"
+            required
+          ></ion-input>
+          <p class="field-hint">Use your school’s Canvas host, without a course or account path.</p>
+        </div>
+
+        <div class="form-field">
+          <ion-label for="canvas-token">Personal access token</ion-label>
+          <ion-input
+            id="canvas-token"
+            name="canvasToken"
+            [(ngModel)]="token"
+            [disabled]="syncing"
+            type="password"
+            autocomplete="off"
+            autocapitalize="off"
+            placeholder="Paste your access token"
+            required
+          ></ion-input>
+          <p class="field-hint">Sent securely to the configured sync server for this request only. FocusFlow does not save the token.</p>
+        </div>
+
+        <ion-button expand="block" class="sync-button" type="submit" [disabled]="syncing || !token.trim() || !domain.trim()">
+          <ion-spinner *ngIf="syncing" name="crescent" slot="start"></ion-spinner>
+          {{ syncing ? 'Syncing courses and assignments…' : 'Sync assignments' }}
+        </ion-button>
+      </form>
+
+      <p
+        class="sync-message"
+        *ngIf="message"
+        [class.success]="messageType === 'success'"
+        [class.error]="messageType === 'error'"
+        role="status"
+      >
+        {{ message }}
+      </p>
+    </section>
+
+    <section class="sync-results" *ngIf="lastSyncedAt">
+      <div class="results-heading">
+        <div>
+          <span class="eyebrow">Connected for this sync</span>
+          <h2>{{ studentName }}</h2>
+        </div>
+        <span class="sync-check">✓</span>
+      </div>
+      <p class="last-sync">Last synced {{ lastSyncedAt | date:'medium' }} · {{ courses.length }} courses</p>
+      <div class="course-chips" *ngIf="courses.length">
+        <span class="course-chip" *ngFor="let course of courses">
+          <strong>{{ course.code }}</strong> {{ course.name }}
+        </span>
+      </div>
+      <div class="import-counts">
+        <span><strong>{{ importedCount }}</strong> added</span>
+        <span><strong>{{ updatedCount }}</strong> refreshed</span>
+      </div>
+    </section>
+
+    <ng-container *ngIf="tasks$ | async as tasks">
+      <section class="imported-list">
+        <div class="results-heading">
+          <div>
+            <span class="eyebrow">Ready to work on</span>
+            <h2>Canvas assignments</h2>
+          </div>
+          <span class="assignment-count">{{ importedTasks(tasks).length }}</span>
+        </div>
+        <article class="imported-assignment" *ngFor="let task of importedTasks(tasks)">
+          <span class="assignment-marker"></span>
+          <div>
+            <h3>{{ displayTitle(task) }}</h3>
+            <p>{{ task.sourceCourse }} · {{ task.dueDate === 'Unscheduled' ? 'No due date' : task.dueDate || 'No due date' }}{{ task.dueTime ? ' · ' + task.dueTime : '' }}</p>
+          </div>
+          <button
+            class="assignment-focus-button"
+            type="button"
+            [disabled]="task.status === 'completed'"
+            (click)="startFocus(task)"
+          >
+            {{ task.status === 'completed' ? 'Done' : 'Start focus' }}
+          </button>
+        </article>
+        <p class="field-hint" *ngIf="importedTasks(tasks).length > 6">
+          And {{ importedTasks(tasks).length - 6 }} more. Find all imported assignments in Your Workload.
+        </p>
+        <p class="field-hint" *ngIf="!importedTasks(tasks).length">
+          Sync Canvas to bring your course assignments into FocusFlow. They’ll also appear in Your Workload.
+        </p>
+      </section>
+    </ng-container>
+
+    <p class="privacy-note">Never share your access token. It is cleared from this form after each sync attempt. Tokens are not stored by FocusFlow.</p>
+  </div>
+</ion-content>

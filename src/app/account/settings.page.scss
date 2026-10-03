@@ -1,0 +1,51 @@
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 15px 0;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+}
+
+.setting-row:last-of-type {
+  border-bottom: 0;
+}
+
+.setting-row span {
+  display: grid;
+  gap: 5px;
+}
+
+.setting-row strong {
+  color: #1e293b;
+  font-size: 0.84rem;
+}
+
+.setting-row small {
+  color: #64748b;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.setting-row input {
+  width: 21px;
+  height: 21px;
+  flex: 0 0 21px;
+  accent-color: #0891b2;
+}
+.duration-setting {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.duration-setting input {
+  width: 110px;
+}
+
+.duration-setting > span {
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 600;
+}

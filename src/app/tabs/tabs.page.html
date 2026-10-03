@@ -1,0 +1,81 @@
+<ion-menu menuId="account-menu" contentId="focusflow-tabs" side="start" type="overlay">
+  <div class="menu-brand">
+    <span class="menu-brand-icon">F</span>
+    <div><strong>FocusFlow</strong><small>Make room for what matters</small></div>
+  </div>
+  <ion-content class="account-menu-content">
+    <ng-container *ngIf="user$ | async as user">
+      <ion-menu-toggle menu="account-menu" autoHide="false">
+        <a class="menu-profile" routerLink="/tabs/profile">
+          <span class="menu-avatar">{{ profileMark(user.firstName, user.surname) }}</span>
+          <span><strong>{{ user.firstName }} {{ user.middleName ? user.middleName + ' ' : '' }}{{ user.surname }}</strong><small>View your profile</small></span>
+          <span class="menu-chevron">›</span>
+        </a>
+      </ion-menu-toggle>
+    </ng-container>
+    <div class="menu-section-label">YOUR SPACE</div>
+    <nav class="menu-links" aria-label="Account navigation">
+      <ion-menu-toggle menu="account-menu" autoHide="false"><a routerLink="/tabs/profile" routerLinkActive="is-active"><span aria-hidden="true">P</span>Profile</a></ion-menu-toggle>
+      <ion-menu-toggle menu="account-menu" autoHide="false"><a routerLink="/tabs/settings" routerLinkActive="is-active"><span aria-hidden="true">S</span>Settings</a></ion-menu-toggle>
+      <ion-menu-toggle menu="account-menu" autoHide="false"><a routerLink="/tabs/about" routerLinkActive="is-active"><span aria-hidden="true">?</span>Getting started</a></ion-menu-toggle>
+    </nav>
+    <div class="menu-section-label">MEMBERSHIP</div>
+    <ion-menu-toggle menu="account-menu" autoHide="false">
+      <a class="menu-plan-card" routerLink="/tabs/subscription">
+        <span class="menu-plan-icon">+</span>
+        <span><strong>Explore FocusFlow Plus</strong><small>Student-friendly plans · from ₱49/mo</small></span>
+        <span class="menu-chevron">›</span>
+      </a>
+    </ion-menu-toggle>
+    <p class="menu-disclaimer">Plan prices are a preview. Payments and student verification are not connected.</p>
+    <div class="menu-footnote">Your tasks and progress are saved on this device.</div>
+  </ion-content>
+</ion-menu>
+
+<ion-tabs id="focusflow-tabs">
+  <ion-tab-bar slot="bottom" class="custom-tab-bar" *ngIf="session$ | async as session">
+    <ion-tab-button tab="home" [disabled]="focusLocked(session)">
+      <ion-icon name="home-outline"></ion-icon>
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="focus">
+      <ion-icon name="timer-outline"></ion-icon>
+      <ion-label>Focus</ion-label>
+    </ion-tab-button>
+
+    <ng-container *ngIf="tasks$ | async as tasks">
+      <ion-tab-button tab="tasks" [disabled]="focusLocked(session)">
+        <ion-icon name="checkbox-outline"></ion-icon>
+        <ion-label>Tasks</ion-label>
+        <ion-badge *ngIf="openTasks(tasks)">{{ openTasks(tasks) }}</ion-badge>
+      </ion-tab-button>
+    </ng-container>
+
+    <ion-tab-button tab="canvas" [disabled]="focusLocked(session)">
+      <ion-icon name="school-outline"></ion-icon>
+      <ion-label>Courses</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="calendar" [disabled]="focusLocked(session)">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <ion-label>Plan</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="insights" [disabled]="focusLocked(session)">
+      <ion-icon name="bar-chart-outline"></ion-icon>
+      <ion-label>Progress</ion-label>
+    </ion-tab-button>
+
+    <ion-menu-toggle class="more-menu-toggle" menu="account-menu" autoHide="false">
+      <button
+        type="button"
+        aria-label="Open profile, settings, and subscription menu"
+        [disabled]="focusLocked(session)"
+      >
+        <span>•••</span>
+        <small>More</small>
+      </button>
+    </ion-menu-toggle>
+  </ion-tab-bar>
+</ion-tabs>

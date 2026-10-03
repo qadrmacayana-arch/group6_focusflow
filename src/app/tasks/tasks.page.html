@@ -1,0 +1,199 @@
+<ion-content class="tasks-content ion-padding">
+  <div class="page-shell" *ngIf="tasks$ | async as tasks">
+    <section class="page-heading">
+      <span class="eyebrow">Make progress, not pressure</span>
+      <h1>{{ showArchive ? 'Completed tasks' : 'Your tasks' }}</h1>
+      <p>{{ showArchive ? 'Finished tasks are kept here. Restore a task to work on it again.' : 'Break larger tasks into small steps, then focus on one at a time.' }}</p>
+    </section>
+
+    <div class="task-summary">
+      <strong>{{ openTaskCount(tasks) }}</strong>
+      <span>open tasks</span>
+      <button type="button" class="archive-toggle" [attr.aria-pressed]="showArchive" (click)="showArchive = !showArchive">
+        {{ showArchive ? 'Back to open tasks' : 'Completed archive (' + archivedTaskCount(tasks) + ')' }}
+      </button>
+    </div>
+
+    <form class="task-composer" (ngSubmit)="addTask()">
+      <div class="composer-heading">
+        <div>
+          <h2>Add a task</h2>
+          <p>Set a deadline and a realistic focus estimate—or leave them open.</p>
+        </div>
+        <span aria-hidden="true">📝</span>
+      </div>
+      <ion-input
+        name="newTaskTitle"
+        [(ngModel)]="newTaskTitle"
+        placeholder="What do you need to work on?"
+        aria-label="New task title"
+        maxlength="120"
+        required
+        enterkeyhint="done"
+      ></ion-input>
+      <div class="composer-fields">
+        <label>
+          <span>Category</span>
+          <select name="newTaskCategory" [(ngModel)]="newTaskCategory" (ngModelChange)="categoryChanged($event)">
+            <option *ngFor="let category of taskCategories" [ngValue]="category">{{ category | titlecase }}</option>
+          </select>
+        </label>
+        <label>
+          <span>Priority</span>
+          <select name="newTaskPriority" [(ngModel)]="newTaskPriority">
+            <option *ngFor="let priority of priorities" [ngValue]="priority">{{ priority | titlecase }}</option>
+          </select>
+        </label>
+        <label>
+          <span>Due date <small>Optional</small></span>
+          <input name="newTaskDueDate" type="date" [(ngModel)]="newTaskDueDate" [min]="minimumDueDate" />
+        </label>
+        <label>
+          <span>Due time <small>Optional</small></span>
+          <input name="newTaskDueTime" type="time" [(ngModel)]="newTaskDueTime" />
+        </label>
+        <label>
+          <span>Focus estimate</span>
+          <div class="duration-input">
+            <input name="newTaskDuration" type="number" [(ngModel)]="newTaskDuration" min="5" max="180" step="5" required />
+            <span>min</span>
+          </div>
+        </label>
+        <label class="color-field">
+          <span>Task color</span>
+          <div class="color-picker-row">
+            <input
+              class="color-wheel"
+              name="newTaskColor"
+              type="color"
+              [(ngModel)]="newTaskColor"
+              aria-label="Choose a custom task color"
+            />
+            <button
+              class="color-swatch"
+              type="button"
+              *ngFor="let color of colorSwatches"
+              [style.backgroundColor]="color"
+              [class.is-selected]="newTaskColor === color"
+              [attr.aria-label]="'Choose task color ' + color"
+              [attr.aria-pressed]="newTaskColor === color"
+              (click)="newTaskColor = color"
+            ></button>
+          </div>
+        </label>
+      </div>
+      <div class="composer-footer">
+        <span>Tasks stay on this device</span>
+        <ion-button type="submit" [disabled]="!newTaskTitle.trim() || !canAddTask">Add task</ion-button>
+      </div>
+    </form>
+
+    <div class="filter-row" aria-label="Filter tasks by category">
+      <button
+        type="button"
+        *ngFor="let category of categories"
+        [class.selected]="selectedCategory === category.value"
+        [attr.aria-pressed]="selectedCategory === category.value"
+        (click)="selectedCategory = category.value"
+      >
+        {{ category.label }}
+      </button>
+    </div>
+
+    <ng-container *ngIf="visibleTasks(tasks).length; else emptyTasks">
+      <article
+        class="task-card"
+        *ngFor="let task of visibleTasks(tasks); trackBy: trackedTask"
+        [attr.data-category]="task.category"
+        [style.--task-accent]="task.color || null"
+        [class.is-completed]="task.status === 'completed'"
+      >
+        <div class="task-card-heading">
+          <ion-checkbox
+            [checked]="task.status === 'completed'"
+            [attr.aria-label]="'Mark ' + task.title + (task.status === 'completed' ? ' incomplete' : ' complete')"
+            (ionChange)="toggleTask(task.id)"
+          ></ion-checkbox>
+          <div class="task-title-wrap">
+            <span class="category-tag" [attr.data-category]="task.category">{{ task.category }}</span>
+            <h2>{{ displayTitle(task.title, task.sourceCourse) }}</h2>
+            <div class="task-meta">
+              <span>{{ taskDeadline(task) }}</span>
+              <span>{{ task.duration }} min</span>
+              <span class="priority" [attr.data-priority]="task.priority">{{ task.priority }} priority</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="subtask-list" *ngIf="task.subtasks.length">
+          <button
+            type="button"
+            class="subtask"
+            *ngFor="let subtask of task.subtasks"
+            [class.done]="subtask.done"
+            [attr.aria-pressed]="subtask.done"
+            (click)="toggleSubtask(task.id, subtask.id)"
+          >
+            <span class="subtask-check">{{ subtask.done ? '✓' : '' }}</span>
+            <span>{{ subtask.title }}</span>
+          </button>
+        </div>
+
+        <div class="task-card-footer">
+          <label class="task-color-control">
+            <input
+              type="color"
+              [name]="'color-' + task.id"
+              [ngModel]="taskColor(task)"
+              (ngModelChange)="setTaskColor(task.id, $event)"
+              [attr.aria-label]="'Change color for ' + task.title"
+            />
+            <span>Color</span>
+          </label>
+          <form class="subtask-add" (ngSubmit)="addSubtask(task.id)">
+            <ion-input
+              [name]="'subtask-' + task.id"
+              [ngModel]="subtaskDrafts[task.id] || ''"
+              (ngModelChange)="subtaskDrafts[task.id] = $event"
+              placeholder="Add a small step"
+              [attr.aria-label]="'Add a step to ' + task.title"
+              maxlength="100"
+            ></ion-input>
+            <button type="submit" [disabled]="!(subtaskDrafts[task.id] || '').trim()" [attr.aria-label]="'Add step to ' + task.title">+</button>
+          </form>
+          <ion-button
+            *ngIf="task.status !== 'completed'"
+            fill="clear"
+            size="small"
+            (click)="startFocus(task)"
+          >
+            Focus on this
+          </ion-button>
+          <ion-button
+            *ngIf="showArchive"
+            fill="clear"
+            size="small"
+            (click)="toggleTask(task.id)"
+          >
+            Restore task
+          </ion-button>
+        </div>
+      </article>
+    </ng-container>
+
+    <ng-template #emptyTasks>
+      <div class="surface-card empty-state">
+        <h2>
+          {{ showArchive
+            ? 'No completed tasks yet'
+            : selectedCategory === 'all' ? 'Your list is clear' : 'No tasks in this category' }}
+        </h2>
+        <p>
+          {{ showArchive
+            ? 'Completed tasks will be kept here. You can restore any task to your open list.'
+            : selectedCategory === 'all' ? 'Add a task above to get started.' : 'Choose another category or add a new task.' }}
+        </p>
+      </div>
+    </ng-template>
+  </div>
+</ion-content>

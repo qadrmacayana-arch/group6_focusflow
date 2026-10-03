@@ -1,0 +1,129 @@
+<ion-content [fullscreen]="true" class="auth-content">
+  <main class="auth-shell">
+    <section class="welcome-box" *ngIf="mode === 'welcome'; else authForm">
+      <div class="logo-badge" aria-hidden="true">F</div>
+
+      <h1>Welcome to <span>FocusFlow</span></h1>
+      <p class="tagline">
+        Make a plan, choose one task, and take focused breaks as you work.
+      </p>
+
+      <div class="action-group">
+        <div class="dual-buttons">
+          <ion-button class="login-button" expand="block" fill="outline" (click)="setMode('login')">
+            Log in
+          </ion-button>
+          <ion-button class="signup-button" expand="block" (click)="setMode('signup')">
+            Sign up
+          </ion-button>
+        </div>
+
+      </div>
+
+      <p class="footer-note">
+        Test app: demo accounts are stored in this browser only. Email ownership is not verified.
+      </p>
+      <p class="auth-notice" *ngIf="notice" role="status" aria-live="polite">{{ notice }}</p>
+    </section>
+
+    <ng-template #authForm>
+      <section class="form-card">
+        <button class="back-button" type="button" (click)="setMode('welcome')">← Back</button>
+
+        <ng-container *ngIf="mode === 'login'; else signupHeading">
+          <h1>Welcome Back</h1>
+          <p class="form-subtitle">Log in with an account created on this browser.</p>
+        </ng-container>
+        <ng-template #signupHeading>
+          <h1>Create Account</h1>
+          <p class="form-subtitle">Create a local test account to get started.</p>
+        </ng-template>
+
+        <form #authFormElement="ngForm" (ngSubmit)="submit(authFormElement)" novalidate>
+          <div class="name-fields" *ngIf="mode === 'signup'">
+            <label class="input-group">
+              <span>First Name</span>
+              <ion-input
+                name="firstName"
+                [(ngModel)]="firstName"
+                placeholder="Alex"
+                autocomplete="given-name"
+                required
+              ></ion-input>
+            </label>
+            <label class="input-group">
+              <span>Middle Name <small>(optional)</small></span>
+              <ion-input
+                name="middleName"
+                [(ngModel)]="middleName"
+                placeholder="Middle name"
+                autocomplete="additional-name"
+              ></ion-input>
+            </label>
+            <label class="input-group">
+              <span>Surname</span>
+              <ion-input
+                name="surname"
+                [(ngModel)]="surname"
+                placeholder="Chen"
+                autocomplete="family-name"
+                required
+              ></ion-input>
+            </label>
+          </div>
+
+          <label class="input-group">
+            <span>Email Address</span>
+            <ion-input
+              name="email"
+              [(ngModel)]="email"
+              type="email"
+              placeholder="name@example.com"
+              autocomplete="email"
+              inputmode="email"
+              autocapitalize="off"
+              required
+              maxlength="254"
+            ></ion-input>
+          </label>
+
+          <label class="input-group">
+            <span>Password</span>
+            <ion-input
+              name="password"
+              [(ngModel)]="password"
+              type="password"
+              [placeholder]="mode === 'signup' ? 'At least 8 characters' : '••••••••'"
+              [autocomplete]="mode === 'signup' ? 'new-password' : 'current-password'"
+              [minlength]="mode === 'signup' ? 8 : 1"
+              maxlength="128"
+              required
+            ></ion-input>
+          </label>
+
+          <label class="input-group" *ngIf="mode === 'signup'">
+            <span>Confirm Password</span>
+            <ion-input
+              name="confirmPassword"
+              [(ngModel)]="confirmPassword"
+              type="password"
+              placeholder="Re-enter your password"
+              autocomplete="new-password"
+              minlength="8"
+              maxlength="128"
+              required
+            ></ion-input>
+          </label>
+
+          <ion-button class="submit-button" type="submit" expand="block" [disabled]="submitting">
+            {{ submitting ? 'Please wait…' : mode === 'login' ? 'Log In' : 'Create Account' }}
+          </ion-button>
+          <p class="auth-notice" *ngIf="notice" role="status" aria-live="polite">{{ notice }}</p>
+        </form>
+        <p class="form-footnote">
+          Demo only. Use a unique test password; accounts stay in this browser and aren’t email-verified.
+        </p>
+      </section>
+    </ng-template>
+  </main>
+</ion-content>

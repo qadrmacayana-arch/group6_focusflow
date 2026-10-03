@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Progress</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="page-shell" *ngIf="tasks$ | async as tasks">
+    <section class="page-heading">
+      <span class="eyebrow">Small steps add up</span>
+      <h1>Your progress</h1>
+      <p>A clear view of what you’ve finished and where your focus is going.</p>
+    </section>
+
+    <div class="metrics-grid" *ngIf="session$ | async as session">
+      <article class="metric-card">
+        <span class="metric-icon done-icon">✓</span>
+        <strong>{{ completedCount(tasks) }}</strong>
+        <span>Tasks completed</span>
+      </article>
+      <article class="metric-card">
+        <span class="metric-icon focus-icon">◷</span>
+        <strong>{{ focusMinutes(session) }}<small> min</small></strong>
+        <span>Focus time this visit</span>
+      </article>
+      <article class="metric-card">
+        <span class="metric-icon cycle-icon">↻</span>
+        <strong>{{ session.completedCycles }}</strong>
+        <span>Focus blocks finished</span>
+      </article>
+      <article class="metric-card">
+        <span class="metric-icon open-icon">→</span>
+        <strong>{{ openCount(tasks) }}</strong>
+        <span>Tasks to work on</span>
+      </article>
+    </div>
+
+    <section class="completion-card">
+      <div class="completion-heading">
+        <div>
+          <span class="eyebrow">Workload</span>
+          <h2>Task completion</h2>
+        </div>
+        <strong>{{ completionPercent(tasks) }}%</strong>
+      </div>
+      <div
+        class="completion-track"
+        role="progressbar"
+        [attr.aria-valuenow]="completionPercent(tasks)"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-label="Task completion"
+      >
+        <span [style.width.%]="completionPercent(tasks)"></span>
+      </div>
+      <p>{{ completedCount(tasks) }} of {{ tasks.length }} tasks completed</p>
+    </section>
+
+    <div class="section-heading">
+      <h2>High-priority tasks</h2>
+      <span>Keep these on your radar</span>
+    </div>
+
+    <ng-container *ngIf="priorityTasks(tasks).length; else noPriorityTasks">
+      <article class="priority-card" *ngFor="let task of priorityTasks(tasks)">
+        <span class="priority-marker"></span>
+        <div>
+          <h3>{{ task.title }}</h3>
+          <p>{{ taskDeadline(task) }} · {{ task.duration }} min</p>
+        </div>
+      </article>
+    </ng-container>
+
+    <ng-template #noPriorityTasks>
+      <div class="surface-card empty-state">
+        <h3>Nothing urgent right now</h3>
+        <p>You have no open high-priority tasks. Nice work staying ahead.</p>
+      </div>
+    </ng-template>
+  </div>
+</ion-content>

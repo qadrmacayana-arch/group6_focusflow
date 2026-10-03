@@ -1,0 +1,642 @@
+.date-group {
+  margin-bottom: 22px;
+}
+
+.date-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 2px 10px;
+
+  h2 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 0.9rem;
+    font-weight: 800;
+  }
+
+  > span:last-child {
+    margin-left: auto;
+    color: #94a3b8;
+    font-size: 0.7rem;
+  }
+}
+
+.date-marker {
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, #8472c7, #dc8c78);
+  border-radius: 50%;
+}
+
+.schedule-card {
+  --task-accent: #7568bd;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 13px 14px 10px;
+  margin-bottom: 8px;
+  background: color-mix(in srgb, var(--task-accent) 5%, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--task-accent) 22%, #ffffff);
+  border-left: 4px solid var(--task-accent);
+  border-radius: 16px;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.035);
+
+  &[data-category='freelance'] {
+    --task-accent: #d17a69;
+  }
+
+  &[data-category='household'] {
+    --task-accent: #5b987a;
+  }
+
+  &.is-completed {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+
+    h3 {
+      color: #94a3b8;
+      text-decoration: line-through;
+    }
+
+    .schedule-time {
+      color: #94a3b8;
+    }
+  }
+}
+
+.schedule-time {
+  flex: 0 0 64px;
+  padding-top: 2px;
+  color: #334155;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.schedule-content {
+  min-width: 0;
+  flex: 1;
+
+  h3 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  p {
+    margin: 5px 0 0;
+    color: #64748b;
+    font-size: 0.67rem;
+    text-transform: capitalize;
+  }
+}
+
+.status-mark {
+  color: #10b981;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.calendar-card,
+.reminder-composer,
+.notification-card {
+  padding: 16px;
+  margin-bottom: 16px;
+  background: #ffffff;
+  border: 1px solid #dce1e5;
+  border-radius: 18px;
+  box-shadow: 0 4px 14px rgba(35, 45, 52, 0.04);
+}
+
+.calendar-card,
+.reminder-composer,
+.notification-card {
+  background: linear-gradient(145deg, #ffffff, #f2eaff);
+  border-color: #dfd0f8;
+  border-radius: 21px;
+  box-shadow: 0 8px 20px rgba(74, 57, 124, 0.065);
+}
+
+.calendar-header h2 {
+  color: #302b3b;
+}
+
+.calendar-header button {
+  color: #5526a7;
+  background: #e8dcff;
+  border-color: #d6c6f2;
+  border-radius: 12px;
+}
+
+.calendar-day {
+  min-height: 52px;
+  color: #4a4358;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 13px;
+
+  &.is-today {
+    color: #5526a7;
+    background: #eee5ff;
+    border-color: #9e7ce8;
+  }
+
+  &.is-selected {
+    color: #ffffff;
+    background: linear-gradient(145deg, #7138d4, #9b59e7);
+    border-color: #7138d4;
+    box-shadow: 0 6px 14px rgba(103, 52, 196, 0.28);
+  }
+}
+
+.day-markers i {
+  background: #8068d8;
+}
+
+.day-markers i.reminder-marker {
+  background: #e58a72;
+}
+
+.calendar-item {
+  background: #ffffff;
+  border-color: #e7e1ee;
+  border-left-color: #8068d8;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(74, 57, 124, 0.045);
+}
+
+.calendar-item.reminder-item {
+  border-left-color: #e58a72;
+}
+
+.reminder-composer input {
+  background: #faf9fd;
+  border-color: #e4dfec;
+}
+
+.reminder-footer button,
+.notification-card button {
+  background: linear-gradient(110deg, #7138d4, #149b88);
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(103, 52, 196, 0.24);
+}
+
+ion-content.calendar-content {
+  --background:
+    radial-gradient(ellipse at 92% 4%, rgba(198, 173, 255, 0.42), transparent 31%),
+    radial-gradient(ellipse at 2% 44%, rgba(255, 195, 165, 0.22), transparent 34%),
+    #fbf8ff;
+}
+
+.calendar-header {
+  display: grid;
+  grid-template-columns: 40px 1fr 40px auto;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+
+  h2 {
+    margin: 0;
+    color: #28343b;
+    font-size: 1rem;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  button {
+    min-height: 38px;
+    color: #45545c;
+    background: #f2f4f5;
+    border: 1px solid #e0e4e7;
+    border-radius: 10px;
+    font: inherit;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .today-button {
+    padding: 0 10px;
+    font-size: 0.72rem;
+  }
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.weekday {
+  padding: 4px 0 7px;
+  color: #77838a;
+  font-size: 0.65rem;
+  font-weight: 750;
+  text-align: center;
+}
+
+.calendar-day {
+  display: flex;
+  min-width: 0;
+  min-height: 48px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: #38464e;
+  background: #ffffff;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  font: inherit;
+  font-size: 0.78rem;
+
+  &.outside-month {
+    color: #aab2b7;
+  }
+
+  &.is-today {
+    border-color: #87969e;
+    font-weight: 800;
+  }
+
+  &.is-selected {
+    color: #ffffff;
+    background: #7568bd;
+    border-color: #7568bd;
+  }
+}
+
+.day-markers {
+  display: flex;
+  min-height: 5px;
+  gap: 3px;
+
+  i,
+  .calendar-legend span {
+    width: 5px;
+    height: 5px;
+    background: #7568bd;
+    border-radius: 50%;
+  }
+
+  i.reminder-marker {
+    background: #d17a69;
+  }
+
+  .is-selected & i {
+    background: #ffffff;
+  }
+}
+
+.calendar-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 12px 0 0;
+  color: #738087;
+  font-size: 0.65rem;
+
+  span,
+  i {
+    width: 6px;
+    height: 6px;
+    background: #7568bd;
+    border-radius: 50%;
+  }
+
+  i {
+    margin-left: 7px;
+    background: #d17a69;
+  }
+}
+
+.selected-date-section {
+  margin-bottom: 22px;
+}
+
+.selected-date-section .section-heading {
+  align-items: baseline;
+
+  h2 {
+    color: #2d3940;
+    font-size: 1rem;
+  }
+
+  span {
+    color: #77838a;
+    font-size: 0.68rem;
+  }
+}
+
+.calendar-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  margin-bottom: 8px;
+  background: #ffffff;
+  border: 1px solid #e0e4e7;
+  border-left: 4px solid #7568bd;
+  border-radius: 13px;
+}
+
+.calendar-item.is-completed {
+  background: #f3f5f5;
+
+  .item-copy strong {
+    color: #768188;
+    text-decoration: line-through;
+  }
+}
+
+.calendar-item.reminder-item {
+  border-left-color: #d17a69;
+}
+
+.calendar-item.is-completed {
+  .start-reminder {
+    display: none;
+  }
+}
+
+.item-time {
+  flex: 0 0 64px;
+  padding-top: 2px;
+  color: #64727a;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.item-copy {
+  min-width: 0;
+  flex: 1;
+
+  strong,
+  small {
+    display: block;
+  }
+
+  strong {
+    color: #2e3b42;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  small {
+    margin-top: 4px;
+    color: #77838a;
+    font-size: 0.66rem;
+    line-height: 1.4;
+  }
+}
+
+.start-reminder,
+.remove-reminder {
+  min-height: 32px;
+  padding: 0 9px;
+  color: #5b4e91;
+  background: #f1eefb;
+  border: 1px solid #e0d9f3;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 0.65rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.remove-reminder {
+  width: 30px;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.date-empty,
+.reminder-composer .section-heading p {
+  margin: 0;
+  color: #77838a;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.reminder-composer .section-heading {
+  margin: 0 0 12px;
+}
+
+.reminder-composer .section-heading h2,
+.notification-card h2 {
+  margin: 0;
+  color: #2d3940;
+  font-size: 0.95rem;
+}
+
+.reminder-composer form,
+.reminder-composer label {
+  display: grid;
+  gap: 8px;
+}
+
+.reminder-composer form {
+  gap: 12px;
+}
+
+.reminder-composer label {
+  min-width: 0;
+  color: #526169;
+  font-size: 0.7rem;
+  font-weight: 750;
+}
+
+.reminder-composer input {
+  width: 100%;
+  min-width: 0;
+  height: 42px;
+  padding: 0 10px;
+  color: #2e3b42;
+  background: #f7f8f8;
+  border: 1px solid #dce1e5;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 0.75rem;
+}
+
+.reminder-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.duration-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  small {
+    flex: 0 0 auto;
+    color: #77838a;
+    font-size: 0.65rem;
+  }
+}
+
+.reminder-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  p {
+    margin: 0;
+    color: #596970;
+    font-size: 0.72rem;
+  }
+
+  button,
+  button:disabled {
+    min-height: 40px;
+    padding: 0 14px;
+    color: #ffffff;
+    background: linear-gradient(110deg, #7568bd, #5f9c9a);
+    border: 0;
+    border-radius: 11px;
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 750;
+  }
+
+  button:disabled {
+    opacity: 0.5;
+  }
+}
+
+.notification-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  p {
+    margin: 5px 0 0;
+    color: #77838a;
+    font-size: 0.7rem;
+    line-height: 1.45;
+  }
+
+  small {
+    display: block;
+    margin-top: 5px;
+    color: #526169;
+    font-size: 0.68rem;
+  }
+
+  button {
+    min-height: 38px;
+    padding: 0 12px;
+    color: #ffffff;
+    background: #5f8f88;
+    border: 0;
+    border-radius: 10px;
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 750;
+  }
+}
+
+@media (max-width: 420px) {
+  .calendar-card,
+  .reminder-composer,
+  .notification-card {
+    padding: 12px;
+  }
+
+  .calendar-day {
+    min-height: 42px;
+  }
+
+  .reminder-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .reminder-fields label:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .item-time {
+    flex-basis: 54px;
+  }
+
+  .notification-card {
+    align-items: flex-start;
+  }
+}
+
+.calendar-card,
+.reminder-composer,
+.notification-card {
+  background: linear-gradient(145deg, #ffffff, #f7f4fc);
+  border-color: #e5def2;
+  border-radius: 21px;
+  box-shadow: 0 8px 20px rgba(74, 57, 124, 0.065);
+}
+
+.calendar-header h2 {
+  color: #302b3b;
+}
+
+.calendar-header button {
+  color: #6758a0;
+  background: #f0edfa;
+  border-color: #e5def2;
+  border-radius: 12px;
+}
+
+.calendar-day {
+  min-height: 52px;
+  color: #4a4358;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 13px;
+
+  &.is-today {
+    color: #725ac6;
+    background: #f2eefb;
+    border-color: #aa98e1;
+  }
+
+  &.is-selected {
+    color: #ffffff;
+    background: linear-gradient(145deg, #8068d8, #987bdf);
+    border-color: #8068d8;
+    box-shadow: 0 5px 12px rgba(111, 83, 190, 0.24);
+  }
+}
+
+.day-markers i {
+  background: #8068d8;
+}
+
+.day-markers i.reminder-marker {
+  background: #e58a72;
+}
+
+.calendar-item {
+  background: #ffffff;
+  border-color: #e7e1ee;
+  border-left-color: #8068d8;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(74, 57, 124, 0.045);
+}
+
+.calendar-item.reminder-item {
+  border-left-color: #e58a72;
+}
+
+.reminder-composer input {
+  background: #faf9fd;
+  border-color: #e4dfec;
+}
+
+.reminder-footer button,
+.notification-card button {
+  background: linear-gradient(110deg, #8068d8, #55a89c);
+  border-radius: 12px;
+  box-shadow: 0 5px 12px rgba(111, 83, 190, 0.15);
+}

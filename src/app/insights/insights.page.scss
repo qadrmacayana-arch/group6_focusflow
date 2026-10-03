@@ -1,0 +1,147 @@
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.metric-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 136px;
+  padding: 15px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.035);
+
+  strong {
+    margin-top: 12px;
+    color: #0f172a;
+    font-size: 1.55rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 1;
+
+    small {
+      font-size: 0.8rem;
+      letter-spacing: 0;
+    }
+  }
+
+  > span:last-child {
+    margin-top: 6px;
+    color: #64748b;
+    font-size: 0.72rem;
+  }
+}
+
+.metric-icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.done-icon,
+.cycle-icon {
+  color: #15803d;
+  background: #f0fdf4;
+}
+
+.focus-icon {
+  color: #0e7490;
+  background: #ecfeff;
+}
+
+.open-icon {
+  color: #c2410c;
+  background: #fff7ed;
+}
+
+.completion-card {
+  padding: 19px;
+  margin-top: 15px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+
+  > p {
+    margin: 9px 0 0;
+    color: #64748b;
+    font-size: 0.73rem;
+  }
+}
+
+.completion-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h2 {
+    margin: 5px 0 0;
+    color: #0f172a;
+    font-size: 0.95rem;
+    font-weight: 800;
+  }
+
+  > strong {
+    color: #0e7490;
+    font-size: 1.3rem;
+    font-weight: 800;
+  }
+
+  .eyebrow {
+    font-size: 0.6rem;
+  }
+}
+
+.completion-track {
+  overflow: hidden;
+  height: 8px;
+  margin-top: 17px;
+  background: #f1f5f9;
+  border-radius: 99px;
+
+  span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, #06b6d4, #10b981, #f97316);
+    border-radius: inherit;
+    transition: width 240ms ease;
+  }
+}
+
+.priority-card {
+  display: flex;
+  gap: 12px;
+  padding: 15px;
+  margin-bottom: 9px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+
+  h3 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 0.83rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  p {
+    margin: 6px 0 0;
+    color: #64748b;
+    font-size: 0.7rem;
+  }
+}
+
+.priority-marker {
+  flex: 0 0 8px;
+  height: 8px;
+  margin-top: 4px;
+  background: #f43f5e;
+  border-radius: 50%;
+}
