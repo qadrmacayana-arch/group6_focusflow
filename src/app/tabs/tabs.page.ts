@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import {
   IonBadge,
@@ -8,6 +8,7 @@ import {
   IonLabel,
   IonMenu,
   IonMenuToggle,
+  ModalController,
   IonTabBar,
   IonTabButton,
   IonTabs,
@@ -25,6 +26,8 @@ import { Task, TaskService } from '../services/task.service';
 import { TimerService, TimerSession } from '../services/timer.service';
 import { UserService } from '../services/user.service';
 import { ReminderService } from '../services/reminder.service';
+import { filter, take } from 'rxjs';
+import { OnboardingModalComponent } from '../onboarding/onboarding-modal.component';
 
 @Component({
   selector: 'app-tabs',
@@ -46,7 +49,7 @@ import { ReminderService } from '../services/reminder.service';
     IonBadge,
   ],
 })
-export class TabsPage {
+export class TabsPage implements OnInit {
   tasks$ = this.taskService.tasks$;
   session$ = this.timerService.session$;
   user$ = this.userService.user$;
@@ -57,6 +60,7 @@ export class TabsPage {
     private timerService: TimerService,
     private userService: UserService,
     private reminderService: ReminderService,
+    private modalController: ModalController,
   ) {
     addIcons({
       homeOutline,
@@ -66,6 +70,27 @@ export class TabsPage {
       calendarOutline,
       barChartOutline,
     });
+  }
+
+  ngOnInit(): void {
+    this.user$
+      .pipe(
+        filter((user) => !!user && user.onboardingCompleted === false),
+        take(1),
+      )
+      .subscribe(() => {
+        void this.presentGettingStartedTour();
+      });
+  }
+
+  async presentGettingStartedTour(): Promise<void> {
+    const modal = await this.modalController.create({
+      component: OnboardingModalComponent,
+      cssClass: 'onboarding-modal',
+      backdropDismiss: false,
+      canDismiss: async (_data, role) => role === 'complete' || role === 'skip',
+    });
+    await modal.present();
   }
 
   openTasks(tasks: Task[]): number {

@@ -1,16 +1,16 @@
-<ion-content class="tasks-content ion-padding">
+<ion-content class="tasks-content">
   <div class="page-shell" *ngIf="tasks$ | async as tasks">
     <section class="page-heading">
       <span class="eyebrow">Make progress, not pressure</span>
-      <h1>{{ showArchive ? 'Completed tasks' : 'Your tasks' }}</h1>
-      <p>{{ showArchive ? 'Finished tasks are kept here. Restore a task to work on it again.' : 'Break larger tasks into small steps, then focus on one at a time.' }}</p>
+      <h1>{{ showArchive ? 'Task archive' : 'Your tasks' }}</h1>
+      <p>{{ showArchive ? 'Finished and archived tasks are kept here. Restore one whenever you want to work on it again.' : 'Break larger tasks into small steps, then focus on one at a time.' }}</p>
     </section>
 
     <div class="task-summary">
       <strong>{{ openTaskCount(tasks) }}</strong>
       <span>open tasks</span>
       <button type="button" class="archive-toggle" [attr.aria-pressed]="showArchive" (click)="showArchive = !showArchive">
-        {{ showArchive ? 'Back to open tasks' : 'Completed archive (' + archivedTaskCount(tasks) + ')' }}
+        {{ showArchive ? 'Back to open tasks' : 'Task archive (' + archivedTaskCount(tasks) + ')' }}
       </button>
     </div>
 
@@ -52,7 +52,7 @@
           <span>Due time <small>Optional</small></span>
           <input name="newTaskDueTime" type="time" [(ngModel)]="newTaskDueTime" />
         </label>
-        <label>
+        <label class="duration-field">
           <span>Focus estimate</span>
           <div class="duration-input">
             <input name="newTaskDuration" type="number" [(ngModel)]="newTaskDuration" min="5" max="180" step="5" required />
@@ -169,14 +169,25 @@
           >
             Focus on this
           </ion-button>
-          <ion-button
+          <button
             *ngIf="showArchive"
-            fill="clear"
-            size="small"
-            (click)="toggleTask(task.id)"
-          >
-            Restore task
-          </ion-button>
+            class="task-action restore-action"
+            type="button"
+            (click)="restoreTask(task.id)"
+          >Restore</button>
+          <button
+            *ngIf="!showArchive"
+            class="task-action"
+            type="button"
+            (click)="archiveTask(task.id)"
+            [attr.aria-label]="'Archive ' + displayTitle(task.title, task.sourceCourse)"
+          >Archive</button>
+          <button
+            class="task-action delete-action"
+            type="button"
+            (click)="confirmDelete(task)"
+            [attr.aria-label]="'Delete ' + displayTitle(task.title, task.sourceCourse)"
+          >Delete</button>
         </div>
       </article>
     </ng-container>
@@ -185,12 +196,12 @@
       <div class="surface-card empty-state">
         <h2>
           {{ showArchive
-            ? 'No completed tasks yet'
+            ? 'Your archive is clear'
             : selectedCategory === 'all' ? 'Your list is clear' : 'No tasks in this category' }}
         </h2>
         <p>
           {{ showArchive
-            ? 'Completed tasks will be kept here. You can restore any task to your open list.'
+            ? 'Finished tasks appear here automatically. You can also archive individual tasks and restore any task to your open list.'
             : selectedCategory === 'all' ? 'Add a task above to get started.' : 'Choose another category or add a new task.' }}
         </p>
       </div>

@@ -12,6 +12,7 @@ export interface UserProfile {
   isLoggedIn: boolean;
   provider: 'password';
   avatar: string;
+  onboardingCompleted?: boolean;
 }
 
 interface DemoAccount {
@@ -21,6 +22,7 @@ interface DemoAccount {
   email: string;
   salt: string;
   passwordHash: string;
+  onboardingCompleted?: boolean;
 }
 
 const ACCOUNTS_STORAGE_KEY = 'focusflow.demoAccounts.v1';
@@ -69,6 +71,7 @@ export class UserService {
       email: normalizedEmail,
       salt,
       passwordHash,
+      onboardingCompleted: false,
     };
     const nextAccounts = [...this.accounts, account];
     this.saveAccounts(nextAccounts);
@@ -97,6 +100,25 @@ export class UserService {
     this.userSubject.next(null);
     localStorage.removeItem(PROFILE_STORAGE_KEY);
     this.lastAuthMessage = null;
+  }
+
+  completeOnboarding(): void {
+    const current = this.userSubject.value;
+    if (!current) {
+      throw new Error('Sign in before saving tutorial progress.');
+    }
+
+    const accountIndex = this.accounts.findIndex((account) => account.email === current.email);
+    if (accountIndex < 0) {
+      throw new Error('This local demo account could not be found. Sign in again.');
+    }
+
+    const nextAccounts = this.accounts.map((account, index) =>
+      index === accountIndex ? { ...account, onboardingCompleted: true } : account,
+    );
+    this.saveAccounts(nextAccounts);
+    this.accounts = nextAccounts;
+    this.setUser({ ...current, onboardingCompleted: true });
   }
 
   updateProfile(
@@ -158,6 +180,7 @@ export class UserService {
       isLoggedIn: true,
       provider: 'password',
       avatar: 'FF',
+      onboardingCompleted: account.onboardingCompleted ?? true,
     };
   }
 
@@ -241,12 +264,17 @@ export class UserService {
             typeof account['surname'] === 'string' &&
             typeof account['email'] === 'string' &&
             typeof account['salt'] === 'string' &&
-            typeof account['passwordHash'] === 'string',
+            typeof account['passwordHash'] === 'string' &&
+            (account['onboardingCompleted'] === undefined ||
+              typeof account['onboardingCompleted'] === 'boolean'),
         )
       ) {
         throw new Error('Saved demo accounts have an invalid shape.');
       }
-      return parsed as DemoAccount[];
+      return (parsed as DemoAccount[]).map((account) => ({
+        ...account,
+        onboardingCompleted: account.onboardingCompleted ?? true,
+      }));
     } catch (error) {
       console.error('Could not load FocusFlow demo accounts.', error);
       localStorage.removeItem(ACCOUNTS_STORAGE_KEY);
@@ -262,8 +290,14 @@ export class UserService {
 
     try {
       const user: unknown = JSON.parse(saved);
-      if (this.isUserProfile(user) && this.accounts.some((account) => account.email === user.email)) {
-        return user;
+      const account = this.accounts.find(
+        (savedAccount) => this.isUserProfile(user) && savedAccount.email === user.email,
+      );
+      if (account && this.isUserProfile(user)) {
+        return {
+          ...user,
+          onboardingCompleted: account.onboardingCompleted ?? true,
+        };
       }
     } catch (error) {
       console.error('Could not load the saved FocusFlow profile.', error);

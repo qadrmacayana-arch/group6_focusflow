@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { IonContent } from '@ionic/angular/standalone';
+import { IonButton, IonContent, ModalController } from '@ionic/angular/standalone';
+import { OnboardingModalComponent } from '../onboarding/onboarding-modal.component';
 
 @Component({
   selector: 'app-about',
@@ -12,6 +13,9 @@ import { IonContent } from '@ionic/angular/standalone';
         <p class="account-intro">
           FocusFlow helps you plan work, start with one small action, and take breaks between focus sessions.
         </p>
+        <ion-button class="account-action tour-launch-button" (click)="openGettingStartedTour()">
+          Take the interactive tour
+        </ion-button>
 
         <section class="account-card">
           <h2>Getting started</h2>
@@ -20,7 +24,7 @@ import { IonContent } from '@ionic/angular/standalone';
             <li><strong>Plan your month.</strong> Open Plan to browse task dates, choose a day, or write a timed reminder.</li>
             <li><strong>Allow alerts.</strong> In Plan, enable browser notifications. Keep FocusFlow open to receive scheduled alerts.</li>
             <li><strong>Start focusing.</strong> Choose a task or reminder, write the first small step, then start the timer.</li>
-            <li><strong>Review finished work.</strong> Completed tasks stay in the Completed archive on the Tasks screen. Restore one if you need it again.</li>
+            <li><strong>Review finished work.</strong> Completed tasks stay in the Task archive on the Tasks screen. Archive individual tasks, restore them later, or permanently delete one after confirmation.</li>
             <li><strong>Make it yours.</strong> Open Settings to change focus and break lengths or notification preferences.</li>
           </ol>
         </section>
@@ -49,6 +53,18 @@ import { IonContent } from '@ionic/angular/standalone';
   `,
   styleUrls: ['./account-shared.scss', './about.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonContent],
+  imports: [CommonModule, IonButton, IonContent],
 })
-export class AboutPage {}
+export class AboutPage {
+  constructor(private readonly modalController: ModalController) {}
+
+  async openGettingStartedTour(): Promise<void> {
+    const modal = await this.modalController.create({
+      component: OnboardingModalComponent,
+      cssClass: 'onboarding-modal',
+      backdropDismiss: false,
+      canDismiss: async (_data, role) => role === 'complete' || role === 'skip',
+    });
+    await modal.present();
+  }
+}

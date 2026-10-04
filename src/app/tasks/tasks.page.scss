@@ -13,7 +13,7 @@
 
   strong {
     color: #7163bf;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 800;
   }
 
@@ -28,6 +28,7 @@
     font: inherit;
     font-size: 0.7rem;
     font-weight: 750;
+    line-height: 1.2;
   }
 }
 
@@ -54,7 +55,42 @@
     background: #fbfaff;
     border: 1px solid #e6e2ee;
     border-radius: 12px;
+    font-size: 0.84rem;
   }
+}
+
+.tasks-content {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 16px;
+  --padding-bottom: 28px;
+}
+
+.tasks-content .page-heading {
+  margin: 8px 0 20px;
+
+  h1 {
+    font-size: clamp(1.45rem, 4.8vw, 1.75rem);
+    letter-spacing: -0.025em;
+    line-height: 1.18;
+    word-spacing: 0.04em;
+  }
+
+  p {
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+}
+
+.tasks-content > .page-shell {
+  width: 100%;
+  max-width: 880px;
+  margin-inline: auto;
+}
+
+.task-composer {
+  padding: 18px;
+  border-radius: 20px;
 }
 
 .composer-heading {
@@ -65,7 +101,7 @@
   h2 {
     margin: 0;
     color: #0f172a;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 800;
   }
 
@@ -73,7 +109,7 @@
     max-width: 52ch;
     margin: 5px 0 0;
     color: #64748b;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     line-height: 1.45;
   }
 
@@ -94,8 +130,9 @@
     align-content: start;
     gap: 7px;
     color: #475569;
-    font-size: 0.68rem;
+    font-size: 0.67rem;
     font-weight: 700;
+    line-height: 1.25;
   }
 
   label > span small {
@@ -108,15 +145,23 @@
   input {
     width: 100%;
     min-width: 0;
-    height: 40px;
+    height: 42px;
     padding: 0 11px;
     color: #302b3b;
     background: #fbfaff;
     border: 1px solid #e6e2ee;
     border-radius: 10px;
     font: inherit;
-    font-size: 0.75rem;
+    font-size: 0.78rem;
   }
+}
+
+.duration-input {
+  width: min(100%, 220px);
+}
+
+.duration-input input {
+  font-size: 0.82rem;
 }
 
 .color-field {
@@ -188,6 +233,7 @@
 
     &::part(native) {
       white-space: nowrap;
+      font-size: 0.82rem;
     }
   }
 }
@@ -412,6 +458,7 @@
 .task-card-footer {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 7px;
   padding-top: 10px;
   margin-top: 10px;
@@ -422,6 +469,36 @@
     margin: 0;
     font-size: 0.7rem;
   }
+}
+
+.task-action {
+  min-height: 32px;
+  padding: 0 10px;
+  color: #5f4a98;
+  background: #f3effa;
+  border: 1px solid #e6dff3;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.task-action.restore-action {
+  color: #246b56;
+  background: #edf7f2;
+  border-color: #d6eadf;
+}
+
+.task-action.delete-action {
+  color: #a34454;
+  background: #fff4f4;
+  border-color: #f3dfe2;
+}
+
+.task-action:focus-visible {
+  outline: 3px solid rgba(113, 56, 212, 0.3);
+  outline-offset: 2px;
 }
 
 .task-color-control {
@@ -495,7 +572,7 @@
 
   strong {
     color: #725ac6;
-    font-size: 1.5rem;
+    font-size: 1.15rem;
   }
 
   .archive-toggle {
@@ -536,7 +613,7 @@
 .composer-fields input,
 .task-composer ion-input {
   background: #ffffff;
-  border-color: #cfc3e2;
+  border-color: #d9d2e5;
 }
 
 .composer-fields label > span small {
@@ -561,8 +638,8 @@
 }
 
 .composer-footer ion-button[disabled] {
-  --background: #ded6eb;
-  --color: #45385f;
+  --background: #e8e3f0;
+  --color: #514567;
   --box-shadow: none;
   --opacity: 1;
   opacity: 1;
@@ -597,13 +674,22 @@ ion-content.tasks-content > .page-shell {
 }
 
 @media (max-width: 620px) {
+  .task-composer {
+    padding: 16px;
+  }
+
   .composer-fields {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
 
-  .color-field {
+  .color-field,
+  .duration-field {
     grid-column: 1 / -1;
+  }
+
+  .duration-input {
+    width: 100%;
   }
 
   .color-picker-row {
@@ -622,6 +708,15 @@ ion-content.tasks-content > .page-shell {
 }
 
 @media (max-width: 420px) {
+  .tasks-content {
+    --padding-start: 14px;
+    --padding-end: 14px;
+  }
+
+  .task-composer {
+    padding: 15px;
+  }
+
   .task-summary {
     flex-wrap: wrap;
     gap: 6px 9px;
@@ -635,7 +730,6 @@ ion-content.tasks-content > .page-shell {
 
   .task-composer {
     gap: 13px;
-    padding: 16px;
   }
 
   .composer-fields {

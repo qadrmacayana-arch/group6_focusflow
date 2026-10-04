@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
+  AlertController,
   IonButton,
   IonCheckbox,
   IonContent,
@@ -74,6 +75,7 @@ export class TasksPage {
     private timerService: TimerService,
     private progressService: ProgressService,
     private router: Router,
+    private alertController: AlertController,
   ) {
     addIcons({ documentTextOutline });
   }
@@ -81,7 +83,9 @@ export class TasksPage {
   visibleTasks(tasks: Task[]): Task[] {
     return tasks.filter(
       (task) =>
-        (this.showArchive ? task.status === 'completed' : task.status !== 'completed') &&
+        (this.showArchive
+          ? task.archived === true || task.status === 'completed'
+          : task.archived !== true && task.status !== 'completed') &&
         (this.selectedCategory === 'all' || task.category === this.selectedCategory),
     );
   }
@@ -91,7 +95,31 @@ export class TasksPage {
   }
 
   archivedTaskCount(tasks: Task[]): number {
-    return tasks.filter((task) => task.status === 'completed').length;
+    return tasks.filter((task) => task.archived === true || task.status === 'completed').length;
+  }
+
+  archiveTask(id: string): void {
+    this.taskService.archiveTask(id);
+  }
+
+  restoreTask(id: string): void {
+    this.taskService.restoreTask(id);
+  }
+
+  async confirmDelete(task: Task): Promise<void> {
+    const alert = await this.alertController.create({
+      header: 'Delete this task?',
+      message: `“${this.displayTitle(task.title, task.sourceCourse)}” will be permanently removed from this device. This cannot be undone.`,
+      buttons: [
+        { text: 'Keep task', role: 'cancel' },
+        {
+          text: 'Delete task',
+          role: 'destructive',
+          handler: () => this.taskService.deleteTask(task.id),
+        },
+      ],
+    });
+    await alert.present();
   }
 
   categoryChanged(category: TaskCategory): void {

@@ -17,13 +17,14 @@
     <nav class="menu-links" aria-label="Account navigation">
       <ion-menu-toggle menu="account-menu" autoHide="false"><a routerLink="/tabs/profile" routerLinkActive="is-active"><span aria-hidden="true">P</span>Profile</a></ion-menu-toggle>
       <ion-menu-toggle menu="account-menu" autoHide="false"><a routerLink="/tabs/settings" routerLinkActive="is-active"><span aria-hidden="true">S</span>Settings</a></ion-menu-toggle>
-      <ion-menu-toggle menu="account-menu" autoHide="false"><a routerLink="/tabs/about" routerLinkActive="is-active"><span aria-hidden="true">?</span>Getting started</a></ion-menu-toggle>
+      <ion-menu-toggle menu="account-menu" autoHide="false"><button type="button" (click)="presentGettingStartedTour()"><span aria-hidden="true">?</span>Getting started</button></ion-menu-toggle>
+      <ion-menu-toggle menu="account-menu" autoHide="false"><a routerLink="/tabs/about" routerLinkActive="is-active"><span aria-hidden="true">i</span>Help &amp; About</a></ion-menu-toggle>
     </nav>
     <div class="menu-section-label">MEMBERSHIP</div>
     <ion-menu-toggle menu="account-menu" autoHide="false">
       <a class="menu-plan-card" routerLink="/tabs/subscription">
         <span class="menu-plan-icon">+</span>
-        <span><strong>Explore FocusFlow Plus</strong><small>Student-friendly plans · from ₱49/mo</small></span>
+        <span><strong>Explore FocusFlow Plus</strong><small>Planned features · no purchases yet</small></span>
         <span class="menu-chevron">›</span>
       </a>
     </ion-menu-toggle>

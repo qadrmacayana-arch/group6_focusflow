@@ -29,7 +29,7 @@ interface PremiumFeature {
         <h1 class="account-title">Plans for student life</h1>
         <p class="account-intro">
           Keep the essentials free. Upgrade only when the extra structure is worth it for you.
-          These are proposed launch prices in Philippine pesos.
+          The prices below are only a proposal; Plus is not available to purchase in this build.
         </p>
 
         <div class="billing-switch" role="group" aria-label="Choose billing period">
@@ -62,7 +62,7 @@ interface PremiumFeature {
               <li>Deeper focus reports and saved routines</li>
               <li>More soundscapes and personalization</li>
             </ul>
-            <button class="account-action plan-button" type="button" (click)="showCheckoutNotice()">Preview Plus</button>
+            <button class="account-action plan-button" type="button" disabled>Purchases unavailable</button>
           </section>
 
           <section class="plan-card student-plan">
@@ -81,8 +81,9 @@ interface PremiumFeature {
 
         <p class="account-status plan-notice" role="status" *ngIf="notice">{{ notice }}</p>
         <p class="pricing-disclaimer">
-          Prices are a proposal, not an active offer. Payments, renewals, student verification, and
-          subscription benefits are not connected yet. Nothing will be charged from this screen.
+          This build has no checkout or verified purchase system. You cannot purchase or unlock Plus
+          here, and nothing will be charged. A real subscription must be confirmed by a trusted
+          payment provider before paid access is granted.
         </p>
 
         <section class="premium-section">
@@ -95,7 +96,7 @@ interface PremiumFeature {
               <div><h3>{{ feature.title }}</h3><p>{{ feature.description }}</p><small>{{ feature.status }}</small></div>
             </article>
           </div>
-          <p class="account-note">Planned feature previews are not live services yet. We’ll only list something as included once it actually works.</p>
+          <p class="account-note">These are planned features, not included benefits today. We’ll only mark them available after the feature and secure purchase verification are working.</p>
         </section>
       </main>
     </ion-content>
@@ -135,11 +136,7 @@ export class SubscriptionPage {
     return this.billingCycle === 'monthly' ? '₱49' : '₱399';
   }
 
-  showCheckoutNotice(): void {
-    this.notice = 'Checkout is not connected yet. This is a proposed price preview; no payment will be taken.';
-  }
-
   showStudentNotice(): void {
-    this.notice = 'Student verification is not connected yet. The displayed student price is a proposal, not an active discount.';
+    this.notice = 'Student pricing is not available yet. Verification and checkout must be connected before this can be offered.';
   }
 }

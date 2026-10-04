@@ -26,6 +26,7 @@ export interface Task {
   title: string;
   category: TaskCategory;
   status: 'pending' | 'in_progress' | 'completed';
+  archived?: boolean;
   duration: number;
   priority: 'high' | 'medium' | 'low';
   color?: string;
@@ -87,6 +88,7 @@ export class TaskService {
       ...task,
       id: `task-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       status: 'pending',
+      archived: false,
       subtasks: [],
     };
     this.publish([created, ...this.tasksSubject.value]);
@@ -164,6 +166,32 @@ export class TaskService {
     this.publish(
       this.tasksSubject.value.map((task) => (task.id === id ? { ...task, status } : task)),
     );
+  }
+
+  archiveTask(id: string): void {
+    this.publish(
+      this.tasksSubject.value.map((task) =>
+        task.id === id ? { ...task, archived: true } : task,
+      ),
+    );
+  }
+
+  restoreTask(id: string): void {
+    this.publish(
+      this.tasksSubject.value.map((task) =>
+        task.id === id
+          ? {
+              ...task,
+              archived: false,
+              status: task.status === 'completed' ? 'pending' : task.status,
+            }
+          : task,
+      ),
+    );
+  }
+
+  deleteTask(id: string): void {
+    this.publish(this.tasksSubject.value.filter((task) => task.id !== id));
   }
 
   setTaskColor(id: string, color: string): void {
@@ -256,6 +284,7 @@ export class TaskService {
       (task['status'] === 'pending' ||
         task['status'] === 'in_progress' ||
         task['status'] === 'completed') &&
+      (task['archived'] === undefined || typeof task['archived'] === 'boolean') &&
       typeof task['duration'] === 'number' &&
       Number.isFinite(task['duration']) &&
       task['duration'] > 0 &&

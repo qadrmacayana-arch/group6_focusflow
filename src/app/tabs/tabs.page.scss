@@ -157,20 +157,27 @@ ion-menu {
   display: block;
 }
 
-.menu-links a {
+.menu-links a,
+.menu-links button {
   display: flex;
   min-height: 46px;
   align-items: center;
   gap: 11px;
   padding: 0 11px;
   color: #475569;
+  background: transparent;
+  border: 0;
   border-radius: 12px;
+  font: inherit;
   font-size: 0.83rem;
   font-weight: 750;
   text-decoration: none;
+  text-align: left;
+  cursor: pointer;
 }
 
-.menu-links a > span:first-child {
+.menu-links a > span:first-child,
+.menu-links button > span:first-child {
   width: 23px;
   font-size: 1rem;
   text-align: center;
