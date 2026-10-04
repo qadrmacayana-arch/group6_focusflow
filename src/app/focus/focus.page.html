@@ -376,7 +376,7 @@
       </form>
     </section>
 
-    <section class="ambient-card">
+    <section class="ambient-card" *ngIf="session$ | async as audioSession">
       <div class="ambient-heading">
         <span class="ambient-icon" aria-hidden="true"><ion-icon name="musical-notes-outline"></ion-icon></span>
         <div>
@@ -397,12 +397,17 @@
           <span>High</span>
         </div>
       </div>
+      <p class="audio-notice" *ngIf="!isFocusAudioReady(audioSession)" role="note">
+        Soundscapes play during a running focus timer. Start or resume the timer first; sounds stop
+        when it pauses or ends.
+      </p>
       <div class="sound-options">
         <button
           type="button"
           *ngFor="let sound of soundOptions"
           [class.is-selected]="ambientMode === sound.id"
           [attr.aria-pressed]="ambientMode === sound.id"
+          [disabled]="sound.id !== 'off' && !isFocusAudioReady(audioSession)"
           (click)="toggleAmbientMode(sound.id)"
         >
           <span class="sound-emoji" aria-hidden="true">{{ sound.icon }}</span>
@@ -410,6 +415,7 @@
           <i *ngIf="ambientMode === sound.id"></i>
         </button>
       </div>
+      <p class="audio-notice audio-notice-message" *ngIf="audioNotice" role="status">{{ audioNotice }}</p>
       <p class="audio-error" *ngIf="audioError" role="alert">{{ audioError }}</p>
     </section>
 

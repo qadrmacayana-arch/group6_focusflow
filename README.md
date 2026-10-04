@@ -16,13 +16,15 @@ FocusFlow is an Ionic Angular study and workload app. The Ionic project remains 
 
 Task deadlines are optional. Manually entered dates are stored as local calendar dates and shown in the monthly Calendar. Task deadline notifications use the task time, or 9:00 AM local time when only a date is set. Reminders can be scheduled for a date and time and include a focus timer length. Browser notifications require permission and are delivered only while FocusFlow is open; they are not native push notifications and may be delayed if the browser suspends the app.
 
+Focus soundscapes are available only while a focus timer is running. They stop when the timer is paused, ends, or the user leaves the Focus screen. Start or resume the focus timer before selecting a sound.
+
 The first-action gate requires an explicit commitment before the focus timer starts, but it cannot verify that the real-world action was performed. During a running focus block, FocusFlow navigation is locked and the web app pauses the timer when the browser reports that its document has become hidden; the student must resume after returning. The current timer phase and remaining time are saved on this device; after a reload, the session is restored paused and can be resumed (including a protected recovery). An emergency-exit action ends the in-app session and leaves the task open. These are in-app safeguards only: a browser cannot prevent switching to other apps, opening another tab, or closing the browser, and background-event delivery can vary by browser and device. The recovery buffer runs as a non-pausable in-app timer phase and does not yet move scheduled calendar blocks: the current planner stores due dates/times, not planned task start and end times.
 
 ## Account, data, and subscription status
 
 Email/password sign-up and login work as local test accounts in the current browser. Sign-up collects first, optional middle, and last name, email, password, and password confirmation. Passwords are never saved in plaintext; the browser stores a salted PBKDF2-SHA-256 hash. Accounts are not uploaded, email ownership is not verified, password reset and Google sign-in are not available, and clearing browser storage removes the accounts. This is demo authentication only—not suitable for production or sensitive credentials. Use a unique test password.
 
-The subscription screen displays proposed pricing of ₱99/month or ₱799/year for Plus, and ₱49/month or ₱399/year for the student plan. These are previews only: checkout, renewals, student verification, and premium entitlements are not implemented. Calendar connections, cloud sync, study groups, and other listed Plus features are planned rather than live services.
+The subscription screen displays proposed pricing of ₱99/month or ₱799/year for Plus, and ₱49/month or ₱399/year for the student plan. These are previews only: checkout, renewals, student verification, and premium entitlements are not implemented. Calendar connections, cloud sync, study groups, and other listed Plus features are planned rather than live services. No purchase or paid unlock is currently available.
 
 ## Run locally
 

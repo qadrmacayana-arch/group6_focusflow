@@ -1153,6 +1153,26 @@
   line-height: 1.4;
 }
 
+.audio-notice {
+  padding: 9px 11px;
+  margin: 0 0 10px;
+  color: #5e5276;
+  background: #f3effa;
+  border: 1px solid #e6def2;
+  border-radius: 10px;
+  font-size: 0.68rem;
+  line-height: 1.45;
+}
+
+.audio-notice-message {
+  margin: 8px 0 0;
+}
+
+.sound-options button:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+}
+
 .main-controls,
 .phase-controls {
   display: flex;

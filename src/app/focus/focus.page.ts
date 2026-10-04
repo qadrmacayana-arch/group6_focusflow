@@ -140,6 +140,7 @@ export class FocusPage implements OnDestroy {
   ambientMode: AmbientMode = 'off';
   ambientVolume = 0.45;
   audioError = '';
+  audioNotice = '';
   researchModalOpen = false;
   researchTab: ResearchTab = 'focus';
   focusNudgeOpen = false;
@@ -185,6 +186,14 @@ export class FocusPage implements OnDestroy {
     this.document.addEventListener('visibilitychange', this.visibilityChangeHandler);
     this.sessionSubscription = this.timerService.session$.subscribe((session) => {
       this.syncQuoteRotation(session);
+      if (
+        this.ambientMode !== 'off' &&
+        !this.isFocusAudioReady(session) &&
+        !this.breathingOpen
+      ) {
+        this.focusAudio.stopAmbient();
+        this.ambientMode = 'off';
+      }
       if (
         session.phase !== this.previousPhase &&
         (session.phase === 'recovery' || session.phase === 'break')
@@ -595,9 +604,18 @@ export class FocusPage implements OnDestroy {
       'Silent focus';
   }
 
+  isFocusAudioReady(session: TimerSession): boolean {
+    return session.phase === 'focus' && session.running;
+  }
+
   async toggleAmbientMode(mode: AmbientMode): Promise<void> {
     const nextMode = this.ambientMode === mode ? 'off' : mode;
     this.audioError = '';
+    this.audioNotice = '';
+    if (nextMode !== 'off' && !this.breathingOpen && !this.isFocusAudioReady(this.timerService.getSession())) {
+      this.audioNotice = 'Start or resume the focus timer to play a soundscape. Sound stops when the timer pauses or ends.';
+      return;
+    }
     const error = await this.focusAudio.setAmbientMode(nextMode, this.ambientVolume);
     if (error) {
       this.ambientMode = 'off';
@@ -605,6 +623,15 @@ export class FocusPage implements OnDestroy {
       return;
     }
     this.ambientMode = nextMode;
+    if (
+      nextMode !== 'off' &&
+      !this.breathingOpen &&
+      !this.isFocusAudioReady(this.timerService.getSession())
+    ) {
+      this.focusAudio.stopAmbient();
+      this.ambientMode = 'off';
+      this.audioNotice = 'The timer paused before audio could start. Resume the focus timer and try again.';
+    }
   }
 
   setAmbientVolume(volume: number): void {

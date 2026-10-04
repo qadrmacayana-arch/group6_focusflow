@@ -144,12 +144,18 @@
 
 .premium-feature {
   display: flex;
+  min-width: 0;
   align-items: flex-start;
   gap: 12px;
   padding: 15px;
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ebe8f3;
   border-radius: 17px;
+  box-shadow: 0 5px 16px rgba(74, 57, 124, 0.035);
+}
+
+.premium-feature-copy {
+  min-width: 0;
 }
 
 .feature-icon {
@@ -181,10 +187,14 @@
 }
 
 .premium-feature small {
-  color: #0e7490;
-  font-size: 0.61rem;
-  font-weight: 900;
-  letter-spacing: 0.1em;
+  display: inline-flex;
+  padding: 4px 7px;
+  color: #6551a1;
+  background: #f1edfa;
+  border-radius: 999px;
+  font-size: 0.58rem;
+  font-weight: 850;
+  letter-spacing: 0.06em;
 }
 
 .premium-section > .account-note {

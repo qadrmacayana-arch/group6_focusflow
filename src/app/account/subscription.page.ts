@@ -55,7 +55,7 @@ interface PremiumFeature {
             <div class="plan-topline"><span class="plan-label">FOCUSFLOW PLUS</span><span class="popular-tag">Student friendly</span></div>
             <h2>Plus</h2>
             <p class="plan-price">{{ plusPrice }} <span>/ {{ billingCycle === 'monthly' ? 'month' : 'year' }}</span></p>
-            <p class="plan-description">{{ billingCycle === 'annual' ? 'About ₱66.58 per month, billed yearly.' : 'Flexible monthly access. Cancel whenever.' }}</p>
+            <p class="plan-description">{{ billingCycle === 'annual' ? 'Proposed yearly price; checkout is not available.' : 'Proposed monthly price; checkout is not available.' }}</p>
             <ul class="account-list">
               <li>Smart study planning and schedule suggestions</li>
               <li>Calendar sync and cross-device backup</li>
@@ -69,7 +69,7 @@ interface PremiumFeature {
             <span class="plan-label">STUDENT DISCOUNT</span>
             <h2>Student Plus</h2>
             <p class="plan-price">{{ studentPrice }} <span>/ {{ billingCycle === 'monthly' ? 'month' : 'year' }}</span></p>
-            <p class="plan-description">{{ billingCycle === 'annual' ? 'About ₱33.25 per month, billed yearly.' : 'Half the monthly Plus price.' }}</p>
+            <p class="plan-description">{{ billingCycle === 'annual' ? 'Proposed student yearly price; not available yet.' : 'Proposed student monthly price; not available yet.' }}</p>
             <ul class="account-list">
               <li>Everything in Plus</li>
               <li>Lower price designed around student budgets</li>
@@ -87,16 +87,16 @@ interface PremiumFeature {
         </p>
 
         <section class="premium-section">
-          <span class="account-eyebrow">Designed for real student routines</span>
-          <h2>What Plus is being built for</h2>
-          <p class="account-intro">Useful upgrades—not paywalls around the basic tools you need to study.</p>
+          <span class="account-eyebrow">Future membership preview</span>
+          <h2>See what Plus may include</h2>
+          <p class="account-intro">Preview planned upgrades before deciding. These features are not live or purchasable yet; free essentials remain available to everyone.</p>
           <div class="account-grid">
             <article class="premium-feature" *ngFor="let feature of premiumFeatures">
               <span class="feature-icon"><ion-icon [name]="feature.icon" aria-hidden="true"></ion-icon></span>
-              <div><h3>{{ feature.title }}</h3><p>{{ feature.description }}</p><small>{{ feature.status }}</small></div>
+              <div class="premium-feature-copy"><h3>{{ feature.title }}</h3><p>{{ feature.description }}</p><small>{{ feature.status }}</small></div>
             </article>
           </div>
-          <p class="account-note">These are planned features, not included benefits today. We’ll only mark them available after the feature and secure purchase verification are working.</p>
+          <p class="account-note">When these features are implemented, paid access should unlock only after a trusted store or payment provider confirms a purchase. No payment or unlock is available in this preview.</p>
         </section>
       </main>
     </ion-content>
@@ -109,12 +109,12 @@ export class SubscriptionPage {
   billingCycle: BillingCycle = 'monthly';
   notice = '';
   readonly premiumFeatures: PremiumFeature[] = [
-    { icon: 'bulb-outline', title: 'Smart study planner', description: 'Turn task estimates and deadlines into a flexible plan for the day.', status: 'PLANNED' },
-    { icon: 'calendar-outline', title: 'Calendar connections', description: 'Bring class schedules and assignment deadlines together.', status: 'PLANNED' },
-    { icon: 'cloud-outline', title: 'Sync and backup', description: 'Keep your tasks and focus history available across devices.', status: 'PLANNED' },
-    { icon: 'bar-chart-outline', title: 'Deeper insights', description: 'See focus patterns and progress over time, not just a streak.', status: 'PLANNED' },
-    { icon: 'headset-outline', title: 'Personal focus spaces', description: 'Save routines, sound mixes, and study-friendly appearances.', status: 'PLANNED' },
-    { icon: 'people-outline', title: 'Study together', description: 'Optional shared focus sessions and friendly accountability.', status: 'PLANNED' },
+    { icon: 'bulb-outline', title: 'Smart study planner', description: 'Turn task estimates and deadlines into a flexible plan for the day.', status: 'PLANNED · PLUS' },
+    { icon: 'calendar-outline', title: 'Calendar connections', description: 'Bring class schedules and assignment deadlines together.', status: 'PLANNED · PLUS' },
+    { icon: 'cloud-outline', title: 'Sync and backup', description: 'Keep your tasks and focus history available across devices.', status: 'PLANNED · PLUS' },
+    { icon: 'bar-chart-outline', title: 'Deeper insights', description: 'See focus patterns and progress over time, not just a streak.', status: 'PLANNED · PLUS' },
+    { icon: 'headset-outline', title: 'Personal focus spaces', description: 'Save routines, sound mixes, and study-friendly appearances.', status: 'PLANNED · PLUS' },
+    { icon: 'people-outline', title: 'Study together', description: 'Optional shared focus sessions and friendly accountability.', status: 'PLANNED · PLUS' },
   ];
 
   constructor() {
