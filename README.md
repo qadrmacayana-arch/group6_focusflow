@@ -46,7 +46,19 @@ $env:CANVAS_ALLOWED_HOSTS = "canvas.tip.edu.ph,school.instructure.com"
 npm start
 ```
 
-Canvas access tokens are sent to the local API for the sync request and are not stored by FocusFlow.
+Canvas access tokens are sent to the API for the sync request and are not stored by FocusFlow.
+
+### Deploying Canvas sync to Vercel
+
+The Canvas endpoint is deployed as a Vercel Function at `/api/canvas/sync` alongside the static Angular app. In the Vercel project, add an Environment Variable named `CANVAS_ALLOWED_HOSTS` for the Production environment containing the exact Canvas hostname(s), comma-separated, for example:
+
+```text
+canvas.tip.edu.ph,school.instructure.com
+```
+
+Do not use wildcards or include URL paths. The server validates each requested HTTPS host against this allowlist. Redeploy after changing environment variables. The function accepts only POST requests and does not persist the supplied token. Test deployment with a token from an allowed Canvas account; never put tokens in source control or share them in chat.
+
+Vercel deployment requires both the static build and the API function. The proposed plans shown in the app are not payment-related and do not affect Canvas access.
 
 ## Production build
 

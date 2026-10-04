@@ -1,7 +1,7 @@
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const port = Number(process.env.PORT || 3000);
@@ -16,14 +16,14 @@ const allowedHosts = new Set(
 const maxBodyBytes = 16 * 1024;
 const requestTimeoutMs = 20_000;
 
-class CanvasApiError extends Error {
+export class CanvasApiError extends Error {
   constructor(status, message) {
     super(message);
     this.status = status;
   }
 }
 
-function sendJson(response, status, body) {
+export function sendJson(response, status, body) {
   response.writeHead(status, {
     'content-type': 'application/json; charset=utf-8',
     'cache-control': 'no-store',
@@ -32,7 +32,7 @@ function sendJson(response, status, body) {
   response.end(JSON.stringify(body));
 }
 
-async function readJson(request) {
+export async function readJson(request) {
   let size = 0;
   const chunks = [];
   for await (const chunk of request) {
@@ -165,7 +165,7 @@ function courseCode(course) {
   return course.course_code || course.name?.slice(0, 8) || `C-${course.id}`;
 }
 
-async function syncCanvas(body) {
+export async function syncCanvas(body) {
   const host = validatedHost(body?.domain || 'canvas.tip.edu.ph');
   const token = typeof body?.token === 'string' ? body.token.trim() : '';
   if (!token || token.length > 4096 || /[\r\n]/.test(token)) {
@@ -354,6 +354,11 @@ const server = createServer(async (request, response) => {
   sendJson(response, 404, { error: 'Not found.' });
 });
 
-server.listen(port, hostAddress, () => {
-  console.log(`FocusFlow API listening on http://${hostAddress}:${port}`);
-});
+if (
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href
+) {
+  server.listen(port, hostAddress, () => {
+    console.log(`FocusFlow API listening on http://${hostAddress}:${port}`);
+  });
+}
