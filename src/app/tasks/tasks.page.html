@@ -22,15 +22,18 @@
         </div>
         <span aria-hidden="true"><ion-icon name="document-text-outline"></ion-icon></span>
       </div>
-      <ion-input
-        name="newTaskTitle"
-        [(ngModel)]="newTaskTitle"
-        placeholder="What do you need to work on?"
-        aria-label="New task title"
-        maxlength="120"
-        required
-        enterkeyhint="done"
-      ></ion-input>
+      <div class="task-title-entry">
+        <ion-input
+          name="newTaskTitle"
+          [(ngModel)]="newTaskTitle"
+          placeholder="What are you working on?"
+          aria-label="New task title"
+          maxlength="120"
+          required
+          enterkeyhint="done"
+        ></ion-input>
+        <ion-button type="submit" [disabled]="!newTaskTitle.trim() || !canAddTask">Add task</ion-button>
+      </div>
       <div class="composer-fields">
         <label>
           <span>Category</span>
@@ -84,7 +87,6 @@
       </div>
       <div class="composer-footer">
         <span>Tasks stay on this device</span>
-        <ion-button type="submit" [disabled]="!newTaskTitle.trim() || !canAddTask">Add task</ion-button>
       </div>
     </form>
 
