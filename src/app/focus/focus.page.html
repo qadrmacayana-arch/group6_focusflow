@@ -165,24 +165,26 @@
       <section class="engagement-gate" *ngIf="session.phase === 'engage'">
         <div class="gate-heading">
           <div>
-            <span class="gate-kicker">Get started</span>
-            <h2>Write your first step</h2>
+            <span class="gate-kicker">The first-move coach</span>
+            <h2>Make the task small enough to start</h2>
           </div>
         </div>
         <p>
-          The timer has not started yet. Write the <strong>first specific action</strong>
-          you’ll do, then tap <strong>Start timer</strong>. You can cancel setup at any time.
+          Pick a suggested two-minute action or write your own. Your timer starts only after
+          you decide what to do first.
         </p>
 
         <div class="micro-prompts">
-          <span class="micro-prompt-label">Quick ideas</span>
+          <span class="micro-prompt-label">A first move for this task</span>
           <div class="prompt-list">
             <button
               type="button"
-              *ngFor="let prompt of microPrompts"
-              (click)="useMicroPrompt(prompt)"
+              *ngFor="let action of starterActions(session)"
+              [class.is-selected]="commitment === action"
+              [attr.aria-pressed]="commitment === action"
+              (click)="useStarterAction(action)"
             >
-              + {{ prompt }}
+              {{ action }}
             </button>
           </div>
         </div>

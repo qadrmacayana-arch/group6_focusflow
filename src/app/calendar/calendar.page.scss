@@ -113,10 +113,10 @@
 .calendar-card,
 .reminder-composer,
 .notification-card {
-  background: linear-gradient(145deg, #ffffff, #f2eaff);
-  border-color: #dfd0f8;
+  background: #ffffff;
+  border-color: #ebe8f3;
   border-radius: 21px;
-  box-shadow: 0 8px 20px rgba(74, 57, 124, 0.065);
+  box-shadow: 0 7px 20px rgba(74, 57, 124, 0.045);
 }
 
 .calendar-header h2 {
@@ -133,20 +133,21 @@
 .calendar-day {
   min-height: 52px;
   color: #4a4358;
-  background: rgba(255, 255, 255, 0.75);
+  background: #fbfaff;
+  border: 1px solid #f0edf5;
   border-radius: 13px;
 
   &.is-today {
     color: #5526a7;
-    background: #eee5ff;
-    border-color: #9e7ce8;
+    background: #f0edfa;
+    border-color: #cfc5ed;
   }
 
   &.is-selected {
     color: #ffffff;
     background: linear-gradient(145deg, #7138d4, #9b59e7);
     border-color: #7138d4;
-    box-shadow: 0 6px 14px rgba(103, 52, 196, 0.28);
+    box-shadow: 0 4px 12px rgba(103, 52, 196, 0.18);
   }
 }
 

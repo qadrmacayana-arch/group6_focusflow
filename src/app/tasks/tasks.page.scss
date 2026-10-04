@@ -6,13 +6,13 @@
   padding: 12px 16px;
   margin-bottom: 16px;
   color: #554d74;
-  background: linear-gradient(100deg, #f0edfb, #eaf4f0);
-  border: 1px solid #e1d9ef;
-  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #ebe8f3;
+  border-radius: 17px;
   font-size: 0.8rem;
 
   strong {
-    color: #7968c3;
+    color: #7163bf;
     font-size: 1.25rem;
     font-weight: 800;
   }
@@ -21,9 +21,9 @@
     min-height: 34px;
     padding: 0 10px;
     margin-left: auto;
-    color: #4f5e66;
+    color: #554d74;
     background: #ffffff;
-    border: 1px solid #d9e0e4;
+    border: 1px solid #e6e2ee;
     border-radius: 10px;
     font: inherit;
     font-size: 0.7rem;
@@ -41,9 +41,9 @@
   padding: 20px;
   margin-bottom: 18px;
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 18px;
-  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.035);
+  border: 1px solid #ebe8f3;
+  border-radius: 21px;
+  box-shadow: 0 8px 24px rgba(74, 57, 124, 0.045);
 
   ion-input {
     --color: #0f172a;
@@ -51,9 +51,9 @@
     min-width: 0;
     min-height: 46px;
     padding: 0 11px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 11px;
+    background: #fbfaff;
+    border: 1px solid #e6e2ee;
+    border-radius: 12px;
   }
 }
 
@@ -110,9 +110,9 @@
     min-width: 0;
     height: 40px;
     padding: 0 11px;
-    color: #0f172a;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    color: #302b3b;
+    background: #fbfaff;
+    border: 1px solid #e6e2ee;
     border-radius: 10px;
     font: inherit;
     font-size: 0.75rem;
@@ -219,7 +219,7 @@
     padding: 0 13px;
     color: #64748b;
     background: #ffffff;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #ebe8f3;
     border-radius: 999px;
     font: inherit;
     font-size: 0.75rem;
@@ -239,11 +239,17 @@
   overflow: hidden;
   padding: 16px;
   margin-bottom: 11px;
-  background: color-mix(in srgb, var(--task-accent, #7138d4) 12%, #ffffff);
-  border: 1px solid color-mix(in srgb, var(--task-accent, #7138d4) 34%, #ffffff);
-  border-left: 5px solid var(--task-accent, #7138d4);
-  border-radius: 16px;
-  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.035);
+  background: color-mix(in srgb, var(--task-accent, #7138d4) 6%, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--task-accent, #7138d4) 22%, #ffffff);
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(74, 57, 124, 0.04);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--task-accent, #7138d4) 40%, #ffffff);
+    box-shadow: 0 9px 20px rgba(74, 57, 124, 0.07);
+    transform: translateY(-1px);
+  }
 
   &::before {
     position: absolute;
@@ -481,11 +487,11 @@
 
 .task-summary {
   padding: 14px 18px;
-  color: #51466d;
-  background: linear-gradient(110deg, #dfd0ff, #ccefe0);
-  border: 1px solid #ded5f1;
-  border-radius: 19px;
-  box-shadow: 0 6px 16px rgba(74, 57, 124, 0.06);
+  color: #554d74;
+  background: #ffffff;
+  border: 1px solid #ebe8f3;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(74, 57, 124, 0.04);
 
   strong {
     color: #725ac6;
@@ -501,10 +507,10 @@
 
 .task-composer {
   padding: 20px;
-  background: linear-gradient(145deg, #eadfff, #ffded1);
-  border: 1px solid #cdb7ef;
-  border-radius: 23px;
-  box-shadow: 0 9px 22px rgba(74, 57, 124, 0.12);
+  background: linear-gradient(145deg, #f4f0ff, #ffffff 75%);
+  border: 1px solid #e4dff1;
+  border-radius: 22px;
+  box-shadow: 0 8px 22px rgba(74, 57, 124, 0.06);
 }
 
 .composer-heading h2 {
@@ -576,19 +582,18 @@
 
 ion-content.tasks-content {
   --background:
-    radial-gradient(ellipse at 92% 4%, rgba(225, 214, 255, 0.5), transparent 30%),
-    radial-gradient(ellipse at 3% 46%, rgba(255, 220, 202, 0.25), transparent 34%),
-    #faf7fc;
+    radial-gradient(ellipse at 92% 4%, rgba(225, 214, 255, 0.35), transparent 30%),
+    #f7f7fb;
 }
 
 .filter-row button.selected {
-  background: linear-gradient(110deg, #7138d4, #9b59e7);
+  background: linear-gradient(110deg, #7138d4, #8069c8);
   border-color: #7138d4;
-  box-shadow: 0 6px 14px rgba(103, 52, 196, 0.3);
+  box-shadow: 0 4px 12px rgba(103, 52, 196, 0.18);
 }
 
-.task-card {
-  border-radius: 18px;
+ion-content.tasks-content > .page-shell {
+  max-width: 880px;
 }
 
 @media (max-width: 620px) {

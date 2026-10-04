@@ -80,9 +80,9 @@ const RESEARCH_FEATURES: ResearchFeature[] = [
     problem:
       "Users have a hard time actually getting tasks started, not just staying focused once underway. Antonio just stares at tasks without starting them, and Perez's manual timer method gets overridden by distractions.",
     rationale:
-      'Directly addresses starting friction surfaced in user interviews. A concrete first-action commitment is required before the focus timer starts.',
+      'Directly addresses starting friction surfaced in user interviews. Task-aware starter actions turn an overwhelming assignment into a small, concrete first move before the focus timer starts.',
     solution:
-      'Requires typing the first concrete action or launching a 2-minute micro-burst before the flow cycle begins. FocusFlow navigation stays locked during the engagement gate and focus session; it does not lock other phone apps.',
+      'Offers task-specific two-minute starter actions, then lets students edit their commitment and continue into a micro-burst or full focus block. FocusFlow navigation stays locked during an active session; it does not lock other phone apps.',
   },
   {
     id: 'buffer',
@@ -127,12 +127,6 @@ export class FocusPage implements OnDestroy {
     { id: 'break', label: 'Break' },
   ];
   readonly cycleDots = [0, 1, 2, 3];
-  readonly microPrompts = [
-    'Open slide 1 & write summary bullet',
-    'Write function header & initial return',
-    'Review 1st feedback note in Figma',
-    'Read first 2 pages of literature review',
-  ];
   readonly soundOptions = SOUND_OPTIONS;
   readonly volumeSteps = VOLUME_STEPS;
   readonly researchFeatures = RESEARCH_FEATURES;
@@ -267,6 +261,49 @@ export class FocusPage implements OnDestroy {
     return nextCycle % 4 === 0 ? '+15m break' : '+5m break';
   }
 
+  starterActions(session: TimerSession): string[] {
+    const task = this.taskService.getTasks().find((item) => item.id === session.currentTaskId);
+    if (!task) {
+      return [
+        'Open the file, page, or materials you will need.',
+        'Write one rough sentence, bullet, or note.',
+        'Set up your workspace for the next two minutes.',
+      ];
+    }
+
+    const fullTitle = this.displayTitle(task.title, task.sourceCourse).trim();
+    const title = fullTitle.length > 48 ? `${fullTitle.slice(0, 45).trimEnd()}…` : fullTitle;
+    if (task.source === 'canvas') {
+      return [
+        `Open the instructions for “${title}” and find the deliverable.`,
+        `Write one rough bullet for “${title}”.`,
+        `Find one course note or source to use for “${title}”.`,
+      ];
+    }
+
+    if (task.category === 'academic') {
+      return [
+        `Open “${title}” and find the exact question to answer.`,
+        `Write one rough bullet for “${title}”.`,
+        `Find one class note or source to use for “${title}”.`,
+      ];
+    }
+
+    if (task.category === 'freelance') {
+      return [
+        `Open the working file for “${title}”.`,
+        `Draft one rough line for “${title}”.`,
+        `Pick the smallest deliverable for “${title}” and start it.`,
+      ];
+    }
+
+    return [
+      `Gather what you need for “${title}”.`,
+      `Do the smallest visible part of “${title}”.`,
+      `Set a two-minute timer and begin “${title}”.`,
+    ];
+  }
+
   openTasks(tasks: Task[]): Task[] {
     return tasks.filter((task) => task.status !== 'completed');
   }
@@ -357,9 +394,10 @@ export class FocusPage implements OnDestroy {
     this.launchMode = mode;
   }
 
-  useMicroPrompt(prompt: string): void {
+  useStarterAction(action: string): void {
     this.focusAudio.playFeedback('tap');
-    this.commitment = prompt;
+    this.commitment = action;
+    this.launchMode = 'micro';
     this.validationMessage = '';
   }
 

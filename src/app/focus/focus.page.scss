@@ -171,8 +171,8 @@
 
     &.is-active {
       color: #ffffff;
-      background: linear-gradient(110deg, #22d3ee, #f97316);
-      box-shadow: 0 3px 8px rgba(6, 182, 212, 0.18);
+      background: linear-gradient(110deg, #7138d4, #149b88);
+      box-shadow: 0 4px 10px rgba(103, 52, 196, 0.2);
     }
 
     &.is-active.is-recovery {
@@ -189,9 +189,9 @@
   padding: 12px;
   margin-bottom: 12px;
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 17px;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+  border: 1px solid #ebe8f3;
+  border-radius: 19px;
+  box-shadow: 0 6px 18px rgba(74, 57, 124, 0.04);
 }
 
 .target-icon {
@@ -566,7 +566,11 @@
 }
 
 .micro-prompts {
+  padding: 11px;
   margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid #c9eef2;
+  border-radius: 14px;
 }
 
 .micro-prompt-label {
@@ -580,21 +584,27 @@
 }
 
 .prompt-list {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 6px;
 
   button {
-    min-height: 30px;
-    padding: 5px 8px;
+    min-height: 38px;
+    padding: 8px 10px;
     color: #164e63;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid #a5f3fc;
-    border-radius: 9px;
+    background: #ffffff;
+    border: 1px solid #d5e9ed;
+    border-radius: 10px;
     font: inherit;
-    font-size: 0.61rem;
+    font-size: 0.67rem;
     font-weight: 750;
     text-align: left;
+    transition: border-color 150ms ease, background-color 150ms ease;
+
+    &.is-selected {
+      color: #5c348a;
+      background: #f3edff;
+      border-color: #bda9ed;
+    }
   }
 }
 

@@ -3,11 +3,11 @@
 }
 
 .connection-card {
-  padding: 21px 18px;
-  background: linear-gradient(145deg, #f0e7ff, #fff0e7);
-  border: 1px solid #d3c0f1;
-  border-radius: 21px;
-  box-shadow: 0 9px 22px rgba(74, 57, 124, 0.1);
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #ebe8f3;
+  border-radius: 22px;
+  box-shadow: 0 8px 24px rgba(74, 57, 124, 0.045);
 }
 
 .connection-card-heading {
@@ -16,7 +16,7 @@
   gap: 12px;
   padding-bottom: 18px;
   margin-bottom: 20px;
-  border-bottom: 1px solid rgba(94, 70, 145, 0.18);
+  border-bottom: 1px solid #efedf4;
 
   h2 {
     margin: 0;
@@ -62,7 +62,7 @@
     --padding-start: 13px;
     --padding-end: 13px;
     min-height: 48px;
-    border: 1px solid #cfc3e2;
+    border: 1px solid #e3dfed;
     border-radius: 12px;
     font-size: 0.86rem;
   }
@@ -77,7 +77,7 @@
 
 .sync-button {
   margin: 22px 0 0;
-  --background: linear-gradient(110deg, #7138d4, #e95e43);
+  --background: linear-gradient(110deg, #7138d4, #149b88);
   --color: #ffffff;
   --border-radius: 13px;
   --box-shadow: 0 6px 14px rgba(103, 52, 196, 0.23);
@@ -139,10 +139,10 @@
 .imported-list {
   padding: 17px;
   margin-top: 14px;
-  background: linear-gradient(145deg, #ffffff, #f5f0ff);
-  border: 1px solid #e2d8f2;
-  border-radius: 18px;
-  box-shadow: 0 5px 16px rgba(15, 23, 42, 0.035);
+  background: #ffffff;
+  border: 1px solid #ebe8f3;
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(74, 57, 124, 0.04);
 }
 
 .results-heading {
