@@ -49,9 +49,12 @@
   ion-input {
     --color: #0f172a;
     --placeholder-color: #94a3b8;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --padding-top: 0;
+    --padding-bottom: 0;
     min-width: 0;
     min-height: 46px;
-    padding: 0 11px;
     background: #fbfaff;
     border: 1px solid #e6e2ee;
     border-radius: 12px;
