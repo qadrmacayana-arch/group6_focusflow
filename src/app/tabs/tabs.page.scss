@@ -39,6 +39,14 @@ ion-tab-button {
   }
 }
 
+@media (min-width: 768px) {
+  ion-tab-bar {
+    width: min(100%, 820px);
+    margin-inline: auto;
+    border-radius: 18px 18px 0 0;
+  }
+}
+
 ion-menu {
   --width: min(326px, 88vw);
   --background: #ffffff;
