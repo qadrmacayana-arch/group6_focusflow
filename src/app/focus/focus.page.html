@@ -4,7 +4,7 @@
       class="focus-lock-banner"
       *ngIf="session.phase === 'engage' || (session.phase === 'focus' && session.started) || session.protectedRecovery"
     >
-      <span class="lock-icon" aria-hidden="true"></span>
+      <ion-icon class="lock-icon" name="lock-closed-outline" aria-hidden="true"></ion-icon>
       <strong>
         {{
           session.protectedRecovery
@@ -66,7 +66,7 @@
     </nav>
 
     <section class="target-card">
-      <div class="target-icon" aria-hidden="true"></div>
+      <div class="target-icon" aria-hidden="true"><span class="focus-emoji">🎯</span></div>
       <div class="target-copy">
         <span class="eyebrow">Working on</span>
         <h2>{{ activeTarget(session) }}</h2>
@@ -376,7 +376,7 @@
 
     <section class="ambient-card">
       <div class="ambient-heading">
-        <span class="ambient-icon" aria-hidden="true"></span>
+        <span class="ambient-icon" aria-hidden="true"><ion-icon name="musical-notes-outline"></ion-icon></span>
         <div>
           <strong>Pick your focus vibe</strong>
           <small>{{ activeSoundDescription }}</small>
@@ -417,7 +417,6 @@
         type="button"
         *ngIf="!session.commitment.trim() && !session.protectedRecovery"
         aria-label="Reset timer"
-        title="Reset timer"
         (click)="resetSession()"
       >
         ↺
@@ -469,7 +468,9 @@
     </section>
 
     <section class="cascade-card" [class.cascade-disabled]="!cascadeBufferEnabled">
-      <div class="cascade-icon" aria-hidden="true"></div>
+      <div class="cascade-icon" aria-hidden="true">
+        <span class="focus-emoji">🛡️</span>
+      </div>
       <div class="cascade-copy">
         <span>BREAK SETTINGS</span>
         <h2>Automatic recovery breaks</h2>

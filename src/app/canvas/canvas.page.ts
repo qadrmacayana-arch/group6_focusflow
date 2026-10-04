@@ -5,10 +5,13 @@ import {
   IonContent,
   IonInput,
   IonLabel,
+  IonIcon,
   IonSpinner,
 } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { addIcons } from 'ionicons';
+import { bookOutline } from 'ionicons/icons';
 import { CanvasCourse, CanvasSyncService } from '../services/canvas-sync.service';
 import { Task, TaskService } from '../services/task.service';
 import { TimerService } from '../services/timer.service';
@@ -25,6 +28,7 @@ import { TimerService } from '../services/timer.service';
     IonLabel,
     IonInput,
     IonButton,
+    IonIcon,
     IonSpinner,
   ],
 })
@@ -47,7 +51,9 @@ export class CanvasPage {
     private taskService: TaskService,
     private timerService: TimerService,
     private router: Router,
-  ) {}
+  ) {
+    addIcons({ bookOutline });
+  }
 
   syncCanvas(): void {
     if (!this.token.trim()) {

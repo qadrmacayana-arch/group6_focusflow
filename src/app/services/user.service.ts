@@ -157,7 +157,7 @@ export class UserService {
       email: account.email,
       isLoggedIn: true,
       provider: 'password',
-      avatar: '✨',
+      avatar: 'FF',
     };
   }
 

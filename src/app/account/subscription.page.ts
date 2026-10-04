@@ -1,6 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { IonContent } from '@ionic/angular/standalone';
+import { IonContent, IonIcon } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import {
+  barChartOutline,
+  bulbOutline,
+  calendarOutline,
+  cloudOutline,
+  headsetOutline,
+  peopleOutline,
+} from 'ionicons/icons';
 
 type BillingCycle = 'monthly' | 'annual';
 
@@ -82,7 +91,7 @@ interface PremiumFeature {
           <p class="account-intro">Useful upgrades—not paywalls around the basic tools you need to study.</p>
           <div class="account-grid">
             <article class="premium-feature" *ngFor="let feature of premiumFeatures">
-              <span class="feature-icon">{{ feature.icon }}</span>
+              <span class="feature-icon"><ion-icon [name]="feature.icon" aria-hidden="true"></ion-icon></span>
               <div><h3>{{ feature.title }}</h3><p>{{ feature.description }}</p><small>{{ feature.status }}</small></div>
             </article>
           </div>
@@ -93,19 +102,30 @@ interface PremiumFeature {
   `,
   styleUrls: ['./account-shared.scss', './subscription.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonContent],
+  imports: [CommonModule, IonContent, IonIcon],
 })
 export class SubscriptionPage {
   billingCycle: BillingCycle = 'monthly';
   notice = '';
   readonly premiumFeatures: PremiumFeature[] = [
-    { icon: '🧠', title: 'Smart study planner', description: 'Turn task estimates and deadlines into a flexible plan for the day.', status: 'PLANNED' },
-    { icon: '🗓️', title: 'Calendar connections', description: 'Bring class schedules and assignment deadlines together.', status: 'PLANNED' },
-    { icon: '☁️', title: 'Sync and backup', description: 'Keep your tasks and focus history available across devices.', status: 'PLANNED' },
-    { icon: '📈', title: 'Deeper insights', description: 'See focus patterns and progress over time, not just a streak.', status: 'PLANNED' },
-    { icon: '🎧', title: 'Personal focus spaces', description: 'Save routines, sound mixes, and study-friendly appearances.', status: 'PLANNED' },
-    { icon: '👥', title: 'Study together', description: 'Optional shared focus sessions and friendly accountability.', status: 'PLANNED' },
+    { icon: 'bulb-outline', title: 'Smart study planner', description: 'Turn task estimates and deadlines into a flexible plan for the day.', status: 'PLANNED' },
+    { icon: 'calendar-outline', title: 'Calendar connections', description: 'Bring class schedules and assignment deadlines together.', status: 'PLANNED' },
+    { icon: 'cloud-outline', title: 'Sync and backup', description: 'Keep your tasks and focus history available across devices.', status: 'PLANNED' },
+    { icon: 'bar-chart-outline', title: 'Deeper insights', description: 'See focus patterns and progress over time, not just a streak.', status: 'PLANNED' },
+    { icon: 'headset-outline', title: 'Personal focus spaces', description: 'Save routines, sound mixes, and study-friendly appearances.', status: 'PLANNED' },
+    { icon: 'people-outline', title: 'Study together', description: 'Optional shared focus sessions and friendly accountability.', status: 'PLANNED' },
   ];
+
+  constructor() {
+    addIcons({
+      barChartOutline,
+      bulbOutline,
+      calendarOutline,
+      cloudOutline,
+      headsetOutline,
+      peopleOutline,
+    });
+  }
 
   get plusPrice(): string {
     return this.billingCycle === 'monthly' ? '₱99' : '₱799';

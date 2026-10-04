@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import {
   IonButton,
   IonContent,
+  IonIcon,
   IonTextarea,
   AlertController,
   ToastController,
@@ -20,6 +21,8 @@ import {
 import { ProgressService } from '../services/progress.service';
 import { AmbientMode, FocusAudioService } from '../services/focus-audio.service';
 import { AppSettingsService } from '../services/app-settings.service';
+import { addIcons } from 'ionicons';
+import { lockClosedOutline, musicalNotesOutline } from 'ionicons/icons';
 
 type ResearchTab = 'focus' | 'buffer' | 'canvas';
 type BreathPhase = 'Inhale' | 'Hold' | 'Exhale' | 'Pause';
@@ -112,7 +115,7 @@ const RESEARCH_FEATURES: ResearchFeature[] = [
   templateUrl: 'focus.page.html',
   styleUrls: ['focus.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonContent, IonButton, IonTextarea],
+  imports: [CommonModule, FormsModule, IonContent, IonButton, IonIcon, IonTextarea],
 })
 export class FocusPage implements OnDestroy {
   readonly session$ = this.timerService.session$;
@@ -183,6 +186,7 @@ export class FocusPage implements OnDestroy {
     private alertController: AlertController,
     @Inject(DOCUMENT) private document: Document,
   ) {
+    addIcons({ lockClosedOutline, musicalNotesOutline });
     this.ambientVolume = settings.getSettings().ambientVolume ?? 0.45;
     this.document.addEventListener('visibilitychange', this.visibilityChangeHandler);
     this.sessionSubscription = this.timerService.session$.subscribe((session) => {

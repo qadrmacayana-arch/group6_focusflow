@@ -3,7 +3,7 @@
     <section class="welcome-header">
       <div class="welcome-copy">
         <span class="welcome-day">{{ weekday }}</span>
-        <h1>{{ greeting }}, {{ (user$ | async)?.firstName || 'Friend' }} <span aria-hidden="true">👋</span></h1>
+        <h1>{{ greeting }}, {{ (user$ | async)?.firstName || 'Friend' }}</h1>
         <div class="xp-row">
           <strong>{{ xp$ | async }} points</strong>
           <div class="xp-track" role="progressbar" [attr.aria-valuenow]="xpPercent()" aria-valuemin="0" aria-valuemax="100">
@@ -43,14 +43,15 @@
     <ion-card class="focus-card">
       <ion-card-content>
         <div class="focus-card-copy">
-          <span class="focus-card-label">✨ A LITTLE PROGRESS ADDS UP</span>
+          <span class="focus-card-label">A LITTLE PROGRESS ADDS UP</span>
           <h2>Ready for a focus sprint?</h2>
           <p *ngIf="pendingTasks(); else noTasksToPlan">
             {{ pendingTasks() }} open {{ pendingTasks() === 1 ? 'task' : 'tasks' }} — choose one and get started.
           </p>
           <ng-template #noTasksToPlan><p>Start fresh with a short focus sprint.</p></ng-template>
           <ion-button class="sprint-button" color="light" (click)="startFocusSession()">
-            🎧 Start a focus sprint
+            <ion-icon name="headset-outline" aria-hidden="true"></ion-icon>
+            Start a focus sprint
           </ion-button>
         </div>
         <div class="focus-card-art" aria-hidden="true">

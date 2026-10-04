@@ -8,6 +8,8 @@ import {
   IonContent,
   IonIcon,
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { headsetOutline } from 'ionicons/icons';
 import {
   defaultTaskColor,
   formatTaskDueDate,
@@ -46,7 +48,9 @@ export class HomePage {
     private progressService: ProgressService,
     private router: Router,
     private settingsService: AppSettingsService,
-  ) {}
+  ) {
+    addIcons({ headsetOutline });
+  }
 
   startFocusSession(): void {
     const nextTask = this.openTasks(this.taskService.getTasks())[0];

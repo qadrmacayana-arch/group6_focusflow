@@ -7,7 +7,10 @@ import {
   IonCheckbox,
   IonContent,
   IonInput,
+  IonIcon,
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { documentTextOutline } from 'ionicons/icons';
 import {
   defaultTaskColor,
   formatTaskDueDate,
@@ -32,6 +35,7 @@ type CategoryFilter = 'all' | TaskCategory;
     IonButton,
     IonCheckbox,
     IonInput,
+    IonIcon,
   ],
 })
 export class TasksPage {
@@ -70,7 +74,9 @@ export class TasksPage {
     private timerService: TimerService,
     private progressService: ProgressService,
     private router: Router,
-  ) {}
+  ) {
+    addIcons({ documentTextOutline });
+  }
 
   visibleTasks(tasks: Task[]): Task[] {
     return tasks.filter(
