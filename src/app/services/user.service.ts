@@ -214,8 +214,8 @@ export class UserService {
   }
 
   private setUser(user: UserProfile): void {
-    this.userSubject.next(user);
     localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(user));
+    this.userSubject.next(user);
   }
 
   private saveAccounts(accounts: DemoAccount[]): void {
