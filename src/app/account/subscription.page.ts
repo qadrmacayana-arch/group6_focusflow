@@ -6,9 +6,9 @@ import {
   barChartOutline,
   bulbOutline,
   calendarOutline,
-  cloudOutline,
-  headsetOutline,
   peopleOutline,
+  schoolOutline,
+  bookOutline,
 } from 'ionicons/icons';
 
 type BillingCycle = 'monthly' | 'annual';
@@ -57,10 +57,10 @@ interface PremiumFeature {
             <p class="plan-price">{{ plusPrice }} <span>/ {{ billingCycle === 'monthly' ? 'month' : 'year' }}</span></p>
             <p class="plan-description">{{ billingCycle === 'annual' ? 'Proposed yearly price; checkout is not available.' : 'Proposed monthly price; checkout is not available.' }}</p>
             <ul class="account-list">
-              <li>Smart study planning and schedule suggestions</li>
-              <li>Calendar sync and cross-device backup</li>
-              <li>Deeper focus reports and saved routines</li>
-              <li>More soundscapes and personalization</li>
+              <li>Course-aware plans for classes, exams, and deadlines</li>
+              <li>Exam sprints and catch-up plans when study slips</li>
+              <li>Study-pattern insights and class-to-study timeline</li>
+              <li>Subject-based focus circles and saved study routines</li>
             </ul>
             <button class="account-action plan-button" type="button" disabled>Purchases unavailable</button>
           </section>
@@ -87,9 +87,9 @@ interface PremiumFeature {
         </p>
 
         <section class="premium-section">
-          <span class="account-eyebrow">Future membership preview</span>
-          <h2>See what Plus may include</h2>
-          <p class="account-intro">Preview planned upgrades before deciding. These features are not live or purchasable yet; free essentials remain available to everyone.</p>
+          <span class="account-eyebrow">Designed for student life</span>
+          <h2>From assignment to exam day</h2>
+          <p class="account-intro">Plus is planned around the way students actually study: balancing subjects, recovering from missed plans, and preparing for exams. These ideas are not live or purchasable yet.</p>
           <div class="account-grid">
             <article class="premium-feature" *ngFor="let feature of premiumFeatures">
               <span class="feature-icon"><ion-icon [name]="feature.icon" aria-hidden="true"></ion-icon></span>
@@ -109,12 +109,12 @@ export class SubscriptionPage {
   billingCycle: BillingCycle = 'monthly';
   notice = '';
   readonly premiumFeatures: PremiumFeature[] = [
-    { icon: 'bulb-outline', title: 'Smart study planner', description: 'Turn task estimates and deadlines into a flexible plan for the day.', status: 'PLANNED · PLUS' },
-    { icon: 'calendar-outline', title: 'Calendar connections', description: 'Bring class schedules and assignment deadlines together.', status: 'PLANNED · PLUS' },
-    { icon: 'cloud-outline', title: 'Sync and backup', description: 'Keep your tasks and focus history available across devices.', status: 'PLANNED · PLUS' },
-    { icon: 'bar-chart-outline', title: 'Deeper insights', description: 'See focus patterns and progress over time, not just a streak.', status: 'PLANNED · PLUS' },
-    { icon: 'headset-outline', title: 'Personal focus spaces', description: 'Save routines, sound mixes, and study-friendly appearances.', status: 'PLANNED · PLUS' },
-    { icon: 'people-outline', title: 'Study together', description: 'Optional shared focus sessions and friendly accountability.', status: 'PLANNED · PLUS' },
+    { icon: 'school-outline', title: 'Course-aware study planner', description: 'Link work to a subject and build manageable study blocks around its difficulty, due date, and exam day.', status: 'PLANNED · PLUS' },
+    { icon: 'calendar-outline', title: 'Exam sprint mode', description: 'Get a short-term revision plan that balances subjects, practice sessions, and recovery time.', status: 'PLANNED · PLUS' },
+    { icon: 'bulb-outline', title: 'Deadline rescue plans', description: 'Turn missed study blocks into a realistic catch-up plan instead of letting work pile up.', status: 'PLANNED · PLUS' },
+    { icon: 'bar-chart-outline', title: 'Study energy insights', description: 'Notice when different kinds of study feel easiest for you and plan demanding work around your patterns.', status: 'PLANNED · PLUS' },
+    { icon: 'book-outline', title: 'Class-to-study timeline', description: 'See classes, assignments, and suggested review together, including what to revisit before class.', status: 'PLANNED · PLUS' },
+    { icon: 'people-outline', title: 'Subject study circles', description: 'Join optional, small focus sessions with classmates for subject-based accountability.', status: 'PLANNED · PLUS' },
   ];
 
   constructor() {
@@ -122,9 +122,9 @@ export class SubscriptionPage {
       barChartOutline,
       bulbOutline,
       calendarOutline,
-      cloudOutline,
-      headsetOutline,
       peopleOutline,
+      schoolOutline,
+      bookOutline,
     });
   }
 

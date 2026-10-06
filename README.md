@@ -24,7 +24,7 @@ The first-action gate requires an explicit commitment before the focus timer sta
 
 Email/password sign-up and login work as local test accounts in the current browser. Sign-up collects first, optional middle, and last name, email, password, and password confirmation. Passwords are never saved in plaintext; the browser stores a salted PBKDF2-SHA-256 hash. Accounts are not uploaded, email ownership is not verified, password reset and Google sign-in are not available, and clearing browser storage removes the accounts. This is demo authentication only—not suitable for production or sensitive credentials. Use a unique test password.
 
-The subscription screen displays proposed pricing of ₱99/month or ₱799/year for Plus, and ₱49/month or ₱399/year for the student plan. These are previews only: checkout, renewals, student verification, and premium entitlements are not implemented. Calendar connections, cloud sync, study groups, and other listed Plus features are planned rather than live services. No purchase or paid unlock is currently available.
+The subscription screen displays proposed pricing of ₱99/month or ₱799/year for Plus, and ₱49/month or ₱399/year for the student plan. These are previews only: checkout, renewals, student verification, and premium entitlements are not implemented. Course-aware study plans, exam sprints, deadline rescue plans, study-pattern insights, a class-to-study timeline, and subject study circles are planned Plus concepts, not live services. No purchase or paid unlock is currently available.
 
 ## Run locally
 
